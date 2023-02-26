@@ -224,21 +224,31 @@ public class Movie {
 
         //bais.skip(1); //pular lapide
 
-        pos = dis.readLong();
+        this.pos = dis.readLong();
 
-        title = dis.readUTF();
+        this.title = dis.readUTF();
 
         for(short i = 0; i< dis.readShort(); i++){
             genres.add(dis.readUTF());
         }
 
-        duration = dis.readShort();
+        this.duration = dis.readShort();
 
         byte[] s = dis.readNBytes(5);
-        contentType = s.toString();
+        this.contentType = s.toString();
 
     
         long mills = dis.readLong();
-        dateAdded.setTime(mills);
+        this.dateAdded.setTime(mills);
+    }
+
+    public String toString(){
+        return "\n ID:" + pos +
+                "\n Title:" + title +
+                "\n Genres:" + genres.toString() +
+                "\n Duration:" + duration +
+                "\n Content Type:" + contentType +
+                "\nDate Added:" + format.format(dateAdded);
+
     }
 }

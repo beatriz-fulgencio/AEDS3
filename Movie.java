@@ -194,7 +194,7 @@ public class Movie {
         DataOutputStream dos = new DataOutputStream(baos);
 
 
-        dos.writeByte(0); //lapide
+        //dos.writeByte(0); //lapide
 
         dos.writeLong(pos); 
         
@@ -222,8 +222,8 @@ public class Movie {
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
 
-        bais.skip(1); //pular lapide
-        
+        //bais.skip(1); //pular lapide
+
         pos = dis.readLong();
 
         title = dis.readUTF();

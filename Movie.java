@@ -6,7 +6,7 @@ public class Movie {
 
     static SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 
-    // private long pos;
+    static private long pos;
     private String movieId;
     private String title;
     private String genres;
@@ -15,7 +15,7 @@ public class Movie {
     private Date dateAdded;
 
     public Movie() {
-        // this.pos = 0;
+        this.pos = 0;
         this.movieId = "";
         this.title = "";
         this.genres = null;
@@ -36,13 +36,14 @@ public class Movie {
 
     // Gets e Sets
 
-    // public void set_pos(long p){
-    // this.pos = p;
-    // }
+    public static void set_pos(long p) {
+        pos = pos;
+        pos++;
+    }
 
-    // public long get_pos(){
-    // return this.pos;
-    // }
+    public long get_pos() {
+        return pos;
+    }
 
     public void set_movieId(String movieId) {
         this.movieId = movieId;
@@ -124,7 +125,12 @@ public class Movie {
     public void read(String line) throws Exception {
         String[] atributos = splitLine(line);
 
-        set_movieId(atributos[0]);
+        // Transforma a posição em uma String de tamanho fixo
+        String padded = String.format("%04d" , pos);
+
+        // System.out.println(padded); 
+        set_pos(pos);
+        set_movieId(padded);
         set_title(atributos[1]);
         set_genres(atributos[2]);
         set_duration(Integer.parseInt(atributos[3]));
@@ -169,7 +175,9 @@ public class Movie {
     }
 
     public String toString() {
-        return "\nID: " + movieId +
+        return  
+        // "\nPosição: " + padded +
+                "\nID: " + movieId +
                 "\nTitle: " + title +
                 "\nGenres: " + genres +
                 "\nDuration: " + duration +

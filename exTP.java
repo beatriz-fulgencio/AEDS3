@@ -24,7 +24,7 @@ public class exTP {
     }
 
     public static void main(String[] args) throws Exception {
-        int m /*3862 */= 3862;
+        int m /*3862 */ = 3862;
         int pos = 0;
 
         RandomAccessFile arq = new RandomAccessFile("movies.db", "rw");
@@ -46,26 +46,26 @@ public class exTP {
                 //System.out.print(movieObjects[j].toString());
             }
             
-            byte[] ba;
-            long lastPos = 0;
-            int len;
-            Movie m_temp = new Movie();
-            try {
+            // byte[] ba;
+            // long lastPos = 0;
+            // int len;
+            // Movie m_temp = new Movie();
+            // try {
     
-                lastPos = arq.getFilePointer();
-                arq.skipBytes((int)lastPos);
-                //arq.skipBytes(4);
-                for(Movie M: movieObjects){
-                    ba = M.toByteArray();
-                    arq.writeByte(1);
-                    //pos = arq.getFilePointer();
-                    arq.writeInt(ba.length);
-                    arq.write(ba);
-                }
+            //     lastPos = arq.getFilePointer();
+            //     arq.skipBytes((int)lastPos);
+            //     //arq.skipBytes(4);
+            //     for(Movie M: movieObjects){
+            //         ba = M.toByteArray();
+            //         arq.writeBoolean(false);
+            //         //pos = arq.getFilePointer();
+            //         arq.writeInt(ba.length);
+            //         arq.write(ba);
+            //     }
     
-            } catch (Exception e) {
-                System.out.println(e.getMessage()); // TODO: handle exception
-            }
+            // } catch (Exception e) {
+            //     System.out.println(e.getMessage()); // TODO: handle exception
+            // }
 
 
             m = m-n;
@@ -87,15 +87,24 @@ public class exTP {
                 arq.seek(0);
                 //arq.skipBytes(4);
                 
-                byte lapide;
+                boolean lapide;
                 
-                lapide = arq.readByte();
-                if(lapide==1){
+                lapide = arq.readBoolean();
+                if(!lapide){
                     len = arq.readInt();
-                    ba = new byte[len];
-                    arq.read(ba);
-                    m_temp.fromByteArray(ba);
-                    System.out.println(m_temp.toString());
+                    String movieId = arq.readUTF();
+                    String title = arq.readUTF();
+                    String genres = arq.readUTF();
+                    int duration = arq.readInt();
+                    String contentType = arq.readUTF();
+                    long mills = arq.readLong();
+            
+                    // ba = new byte[len];
+                    // arq.read(ba);
+                    // m_temp.fromByteArray(ba);
+                    // System.out.println(m_temp.toString());
+                    // System.out.println(m_temp.toString());
+
                 }
 
         arq.close();

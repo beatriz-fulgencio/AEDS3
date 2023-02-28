@@ -9,7 +9,7 @@ public class Movie {
      private long pos;
     private String movieId;
     private String title;
-    private String genres;
+    private String[] genres;
     private int duration;
     private String contentType;
     private Date dateAdded;
@@ -24,7 +24,7 @@ public class Movie {
         this.dateAdded = null;
     }
 
-    public Movie(long pos, String movieId, String title, String genres, int duration, String contentType,
+    public Movie(long pos, String movieId, String title, String[] genres, int duration, String contentType,
             Date dateAdded) {
         this.pos = pos;
         this.movieId = movieId;
@@ -65,11 +65,11 @@ public class Movie {
         return title;
     }
 
-    public void set_genres(String genres) {
+    public void set_genres(String[] genres) {
         this.genres = genres;
     }
 
-    public String get_genres() {
+    public String[] get_genres() {
         return genres;
     }
 
@@ -126,6 +126,12 @@ public class Movie {
         return date;
     }
 
+    public static String convertDateToString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        String dateString = sdf.format(date);
+        return dateString;
+    }
+
     public void read(String line) throws Exception {
     String[] atributos = splitLine(line);
 
@@ -136,7 +142,7 @@ public class Movie {
     //set_pos(pos);
     set_movieId(padded);
     set_title(atributos[1]);
-    set_genres(atributos[2]);
+    set_genres(atributos[2].split(","));
     set_duration(Integer.parseInt(atributos[3]));
     set_contentType(atributos[4]);
     set_dateAdded(convertToDate(atributos[5]));
@@ -151,34 +157,38 @@ public class Movie {
 
     
     public byte[] toByteArray() throws IOException {
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
-        dos.writeBytes(movieId);
+        // fixed sized string
+        dos.writeInt(4); //writes the size of the string
+        dos.writeBytes(movieId);//writes the id
+
+        // varied sized String
+        dos.writeInt(title.length()); //writes the size of the string
         dos.writeUTF(title);
-         dos.writeUTF(genres);
+
+        //multi-valued string
+        dos.writeInt(genres.length); //writes the size of the array
+        for(String s: genres){
+            dos.writeInt(s.length()); //writes the size of each string
+            dos.writeUTF(s); //writes each string 
+        }
+
+        // integer value
         dos.writeInt(duration);
-        dos.writeUTF(contentType);
-        dos.writeLong(dateAdded.getTime());
+
+        dos.writeInt(contentType.length());
+        dos.writeUTF(contentType);//writes the type of content 
+
+        //date
+        dos.writeInt(convertDateToString(dateAdded).length()); //writes the size of the date as a String
+        dos.writeUTF(convertDateToString(dateAdded)); // writes the date as a String
 
         return baos.toByteArray();
     }
 
-    public void fromByteArray(byte ba[]) throws IOException {
-
-        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
-        DataInputStream dis = new DataInputStream(bais);
-
-        movieId = dis.readUTF();
-        title = dis.readUTF();
-        genres = dis.readUTF();
-        duration = dis.readInt();
-        contentType = dis.readUTF();
-        long mills = dis.readLong();
-
-    }
-
+    
     public String toString() {
         return
         // "\nPosição: " + padded +

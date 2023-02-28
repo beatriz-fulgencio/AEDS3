@@ -14,8 +14,8 @@ public class Movie {
     private String contentType;
     private Date dateAdded;
 
+
     public Movie() {
-        this.pos = 0;
         this.movieId = "";
         this.title = "";
         this.genres = null;
@@ -24,8 +24,9 @@ public class Movie {
         this.dateAdded = null;
     }
 
-    public Movie(String movieId, String title, String genres, int duration, String contentType,
+    public Movie(long pos, String movieId, String title, String genres, int duration, String contentType,
             Date dateAdded) {
+        this.pos = pos;
         this.movieId = movieId;
         this.title = title;
         this.genres = genres;
@@ -37,7 +38,6 @@ public class Movie {
     // Gets e Sets
 
     public static void set_pos(long p) {
-        pos = pos;
         pos++;
     }
 
@@ -94,25 +94,25 @@ public class Movie {
     }
 
     private String[] splitLine(String str) {
-        String[] atributos = new String[6];
-        int cont = 0;
-        String aux = "";
+    String[] atributos = new String[6];
+    int cont = 0;
+    String aux = "";
 
-        for (int i = 0; i < str.length(); i++) {
-            if (i != str.length() - 1) {
-                if (str.charAt(i) != ';') {
-                    aux += str.charAt(i);
-                } else {
-                    atributos[cont++] = aux;
-                    aux = "";
-                }
-            } else {
-                aux += str.charAt(i);
-                atributos[cont++] = aux;
-                aux = "";
-            }
-        }
-        return atributos;
+    for (int i = 0; i < str.length(); i++) {
+    if (i != str.length() - 1) {
+    if (str.charAt(i) != ';') {
+    aux += str.charAt(i);
+    } else {
+    atributos[cont++] = aux;
+    aux = "";
+    }
+    } else {
+    aux += str.charAt(i);
+    atributos[cont++] = aux;
+    aux = "";
+    }
+    }
+    return atributos;
     }
 
     public Date convertToDate(String strData) throws Exception {
@@ -123,28 +123,29 @@ public class Movie {
     }
 
     public void read(String line) throws Exception {
-        String[] atributos = splitLine(line);
+    String[] atributos = splitLine(line);
 
-        // Transforma a posição em uma String de tamanho fixo
-        String padded = String.format("%04d" , pos);
+    // Transforma a posição em uma String de tamanho fixo
+    String padded = String.format("%04d" , pos);
 
-        // System.out.println(padded); 
-        set_pos(pos);
-        set_movieId(padded);
-        set_title(atributos[1]);
-        set_genres(atributos[2]);
-        set_duration(Integer.parseInt(atributos[3]));
-        set_contentType(atributos[4]);
-        set_dateAdded(convertToDate(atributos[5]));
+    // System.out.println(padded);
+    set_pos(pos);
+    set_movieId(padded);
+    set_title(atributos[1]);
+    set_genres(atributos[2]);
+    set_duration(Integer.parseInt(atributos[3]));
+    set_contentType(atributos[4]);
+    set_dateAdded(convertToDate(atributos[5]));
 
-        // System.out.println("\nID: " + movieId +
-        // "\nTitle: " + title +
-        // "\nGenres: " + genres +
-        // "\nDuration: " + duration +
-        // "\nContent Type: " + contentType +
-        // "\nDate Added: " + format.format(dateAdded));
+    // System.out.println("\nID: " + movieId +
+    // "\nTitle: " + title +
+    // "\nGenres: " + genres +
+    // "\nDuration: " + duration +
+    // "\nContent Type: " + contentType +
+    // "\nDate Added: " + format.format(dateAdded));
     }
 
+    
     public byte[] toByteArray() throws IOException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -152,7 +153,7 @@ public class Movie {
 
         dos.writeUTF(movieId);
         dos.writeUTF(title);
-        dos.writeUTF(genres);
+        // dos.writeUTF(genres);
         dos.writeInt(duration);
         dos.writeUTF(contentType);
         dos.writeLong(dateAdded.getTime());
@@ -167,7 +168,7 @@ public class Movie {
 
         movieId = dis.readUTF();
         title = dis.readUTF();
-        genres = dis.readUTF();
+        // genres = dis.readUTF();
         duration = dis.readInt();
         contentType = dis.readUTF();
         long mills = dis.readLong();
@@ -175,9 +176,9 @@ public class Movie {
     }
 
     public String toString() {
-        return  
+        return
         // "\nPosição: " + padded +
-                "\nID: " + movieId +
+        "\nID: " + movieId +
                 "\nTitle: " + title +
                 "\nGenres: " + genres +
                 "\nDuration: " + duration +

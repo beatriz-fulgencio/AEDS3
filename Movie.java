@@ -6,7 +6,7 @@ public class Movie {
 
     static SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
 
-    static private long pos;
+     private long pos;
     private String movieId;
     private String title;
     private String genres;
@@ -35,9 +35,13 @@ public class Movie {
         this.dateAdded = dateAdded;
     }
 
+    public Movie(long pos){
+        this.pos = pos;
+    }
+
     // Gets e Sets
 
-    public static void set_pos(long p) {
+    public void set_pos(long p) {
         pos++;
     }
 
@@ -129,7 +133,7 @@ public class Movie {
     String padded = String.format("%04d" , pos);
 
     // System.out.println(padded);
-    set_pos(pos);
+    //set_pos(pos);
     set_movieId(padded);
     set_title(atributos[1]);
     set_genres(atributos[2]);
@@ -151,9 +155,9 @@ public class Movie {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
-        dos.writeUTF(movieId);
+        dos.writeBytes(movieId);
         dos.writeUTF(title);
-        // dos.writeUTF(genres);
+         dos.writeUTF(genres);
         dos.writeInt(duration);
         dos.writeUTF(contentType);
         dos.writeLong(dateAdded.getTime());
@@ -168,7 +172,7 @@ public class Movie {
 
         movieId = dis.readUTF();
         title = dis.readUTF();
-        // genres = dis.readUTF();
+        genres = dis.readUTF();
         duration = dis.readInt();
         contentType = dis.readUTF();
         long mills = dis.readLong();

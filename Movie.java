@@ -13,6 +13,7 @@ public class Movie {
     private int duration;
     private String contentType;
     private Date dateAdded;
+    private boolean valid;
 
 
     public Movie() {
@@ -41,6 +42,14 @@ public class Movie {
 
     // Gets e Sets
 
+    public void set_lapide(boolean b){
+        this.valid = b;
+    }
+
+    public boolean get_lapide(){
+        return valid;
+    }
+
     public void set_pos(long p) {
         pos++;
     }
@@ -51,6 +60,7 @@ public class Movie {
 
     public void set_movieId(String movieId) {
         this.movieId = movieId;
+        this.pos = Integer.parseInt(movieId);
     }
 
     public String get_movieId() {
@@ -89,8 +99,9 @@ public class Movie {
         return contentType;
     }
 
-    public void set_dateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
+    public void set_dateAdded(String dateAdded) throws Exception {
+        Date date = convertToDate(dateAdded);
+        this.dateAdded = date;
     }
 
     public Date get_dateAdded() {
@@ -140,12 +151,13 @@ public class Movie {
 
     // System.out.println(padded);
     //set_pos(pos);
+    set_lapide(true);
     set_movieId(padded);
     set_title(atributos[1]);
     set_genres(atributos[2].split(","));
     set_duration(Integer.parseInt(atributos[3]));
     set_contentType(atributos[4]);
-    set_dateAdded(convertToDate(atributos[5]));
+    set_dateAdded(atributos[5]);
 
     // System.out.println("\nID: " + movieId +
     // "\nTitle: " + title +
@@ -160,9 +172,10 @@ public class Movie {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
+        dos.writeBoolean(valid);
         // fixed sized string
         dos.writeInt(4); //writes the size of the string
-        dos.writeBytes(movieId);//writes the id
+        dos.writeUTF(movieId);//writes the id
 
         // varied sized String
         dos.writeInt(title.length()); //writes the size of the string
@@ -188,7 +201,20 @@ public class Movie {
         return baos.toByteArray();
     }
 
-    
+    public void fromByteArray(byte[] ba) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
+        DataInputStream dis = new DataInputStream(bais);
+        
+        try {
+            int size = dis.readInt();
+            set_movieId(dis.readUTF());
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public String toString() {
         return
         // "\nPosição: " + padded +
@@ -199,4 +225,6 @@ public class Movie {
                 "\nContent Type: " + contentType +
                 "\nDate Added: " + format.format(dateAdded);
     }
+
+    
 }

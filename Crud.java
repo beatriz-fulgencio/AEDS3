@@ -1,5 +1,7 @@
 import java.io.*;
 
+import javax.print.PrintException;
+
 public class Crud {
     private File file;
     private RandomAccessFile fileReader;
@@ -17,9 +19,115 @@ public class Crud {
         
         //add the new movie to the file
         fileReader.seek(fileReader.length()); //goes to the end of the file
-        fileReader.writeBoolean(true); // writes the movie as valid
         fileReader.writeInt(ba.length); //writes the size of the object
         fileReader.write(ba); //writes the object byte array
     }
+
+    private Movie readMovie(int fileSize, String id, boolean lapide) throws Exception{
+        Movie movie = new Movie();
+
+        movie.set_lapide(lapide);
+        movie.set_movieId(id);
+
+        fileReader.readInt();
+        movie.set_title(fileReader.readUTF());
+
+        int n = fileReader.readInt();
+        String[] s = new String[n];
+        for(int i=0; i< n; i++){
+            fileReader.readInt();
+           s[i] = fileReader.readUTF();
+        }
+        movie.set_genres(s);
+
+        movie.set_duration(fileReader.readInt());
+
+        fileReader.readInt();
+        movie.set_contentType(fileReader.readUTF());
+
+        fileReader.readInt();
+        movie.set_dateAdded(fileReader.readUTF());
+
+        return movie;
+    }
+
+    public void read(String id) throws IOException{
+        fileReader.seek(0);
+        fileReader.skipBytes(4);
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+
+        try {
+            while(fileReader.getFilePointer() < fileReader.length()){
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if(lapide){
+                    fileReader.readInt();
+                    movieId= fileReader.readUTF();
+                    if(movieId.equals(id)){
+                        System.out.println(readMovie(sizeMovie, id, lapide));
+                        break;
+                    }else{
+                        fileReader.skipBytes(sizeMovie - 5);
+                    }
+                }else{
+                    fileReader.skipBytes(sizeMovie - 5);
+                }
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+    }
     
+    public Movie read(String id, Movie selectMovie) throws IOException{
+        fileReader.seek(0);
+        fileReader.skipBytes(4);
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+
+        try {
+            while(fileReader.getFilePointer() < fileReader.length()){
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if(lapide){
+                    fileReader.readInt();
+                    movieId= fileReader.readUTF();
+                    if(movieId.equals(id)){
+                        selectMovie = readMovie(sizeMovie, id, lapide);
+                        break;
+                    }else{
+                        fileReader.skipBytes(sizeMovie - 5);
+                    }
+                }else{
+                    fileReader.skipBytes(sizeMovie - 5);
+                }
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return selectMovie;
+    }
+
+    /*CRUD *///--------------------
+    public void create(){
+
+    }
+
+    public void Select(){
+
+    }
+
+    public void update(){
+
+    }
+
+    public void delete(){
+
+    }
+
+    public void clear(){
+        file.delete();
+    }
 }

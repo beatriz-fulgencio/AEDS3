@@ -17,6 +17,7 @@ public class Movie {
 
 
     public Movie() {
+        this.valid = true;
         this.movieId = "";
         this.title = "";
         this.genres = null;
@@ -25,8 +26,9 @@ public class Movie {
         this.dateAdded = null;
     }
 
-    public Movie(long pos, String movieId, String title, String[] genres, int duration, String contentType,
+    public Movie(boolean valid, long pos, String movieId, String title, String[] genres, int duration, String contentType,
             Date dateAdded) {
+        this.valid = valid;
         this.pos = pos;
         this.movieId = movieId;
         this.title = title;
@@ -37,6 +39,7 @@ public class Movie {
     }
 
     public Movie(long pos){
+        this.valid=true;
         this.pos = pos;
     }
 
@@ -61,6 +64,11 @@ public class Movie {
     public void set_movieId(String movieId) {
         this.movieId = movieId;
         this.pos = Integer.parseInt(movieId);
+    }
+
+    public void set_movieId(long pos){
+        this.movieId = String.format("%04d" , pos);
+        this.pos = pos;
     }
 
     public String get_movieId() {
@@ -201,26 +209,16 @@ public class Movie {
         return baos.toByteArray();
     }
 
-    public void fromByteArray(byte[] ba) {
-        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
-        DataInputStream dis = new DataInputStream(bais);
-        
-        try {
-            int size = dis.readInt();
-            set_movieId(dis.readUTF());
-            
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
     public String toString() {
+        String genre="";
+        for(String s: this.genres){
+            genre+=s+", ";
+        }
         return
         // "\nPosição: " + padded +
         "\nID: " + movieId +
                 "\nTitle: " + title +
-                "\nGenres: " + genres +
+                "\nGenres: " + genre +
                 "\nDuration: " + duration +
                 "\nContent Type: " + contentType +
                 "\nDate Added: " + format.format(dateAdded);

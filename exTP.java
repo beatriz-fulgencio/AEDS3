@@ -32,9 +32,9 @@ public class exTP {
         read(byteFileRandler);
 
         //byteFileRandler.clear();
-        byteFileRandler.read("0000");
+        //byteFileRandler.read("0000");
 
-
+        byteFileRandler.create();
     }
 
 }

@@ -75,7 +75,7 @@ public class Crud {
                         System.out.println(readMovie(sizeMovie, id, lapide));
                         break;
                     } else {
-                        fileReader.skipBytes(sizeMovie - 1); // if is not the one being searched go to next one
+                        fileReader.skipBytes(sizeMovie - 11); // if is not the one being searched go to next one
                     }
                 } else {
                     fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
@@ -105,18 +105,19 @@ public class Crud {
                         selectMovie = readMovie(sizeMovie, id, lapide); // save the movie
                         break;
                     } else {
-                        fileReader.skipBytes(sizeMovie - 5);
+                        fileReader.skipBytes(sizeMovie - 11);
                     }
                 } else {
-                    fileReader.skipBytes(sizeMovie - 5);
+                    fileReader.skipBytes(sizeMovie - 1);
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Id "+ id + "não encontrado");
         }
         return selectMovie; // return movie
     }
 
+    
     /* CRUD */// --------------------
     public void create() throws Exception {
         Scanner sc = new Scanner(System.in); // scanner to read terminal information
@@ -150,69 +151,78 @@ public class Crud {
         sc.close();
 
     }
+    public Movie select(String id) throws IOException{
+        Movie movie = new Movie();
+        movie = read(id, movie);
+        return movie;
+    }
 
-    public Movie select(long x) throws Exception {
-        x += 6;
-        System.out.println("Entrou no select");
-        int registerSize;
-        long id;
+
+    public void update(){
+        
+    }
+
+    // public void update(Movie m) {
+    //     fileReader.seek(0); // set the poiter at the beggining of the file
+    //     fileReader.readUTF();// skip last id
+    //     int sizeMovie;
+    //     boolean lapide;
+    //     String movieId;
+    //     try {
+    //         while (fileReader.getFilePointer() < fileReader.length()) { // while the file is not done
+    //             sizeMovie = fileReader.readInt(); // read the size of the object being read
+    //             lapide = fileReader.readBoolean(); // see if movie is valid
+    //             if (lapide) {
+    //                 fileReader.readInt();
+    //                 movieId = fileReader.readUTF();
+    //                 if (movieId.equals(id)) { // see if the id is the one being searched
+    //                     System.out.println(readMovie(sizeMovie, id, lapide));
+    //                     break;
+    //                 } else {
+    //                     fileReader.skipBytes(sizeMovie - 11); // if is not the one being searched go to next one
+    //                 }
+    //             } else {
+    //                 fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
+    //             }
+    //         }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
+    public void delete(String id) throws IOException{
+        fileReader.seek(0); // set the poiter at the beggining of the file
+        fileReader.readUTF();// skip last id
+        int sizeMovie;
         boolean lapide;
-
-        fileReader.seek(0); // ponteiro na posição inicial
-        fileReader.skipBytes(4); // pula 2 bytes iniciais
-
+        String movieId;
+        long lapidePos;
         try {
-            // System.out.println("Entrou no try");
-            Movie movie = null;
-
-            while (fileReader.getFilePointer() < fileReader.length()) {
-                registerSize = fileReader.readInt(); // temos o tamanho do registro?!
-                lapide = fileReader.readBoolean(); // confere se o registro é válido
-                id = fileReader.read(); // recebe o id
-
+            while (fileReader.getFilePointer() < fileReader.length()) { // while the file is not done
+                sizeMovie = fileReader.readInt(); // read the size of the object being read
+                lapidePos=fileReader.getFilePointer(); //saves the position of the lapide
+                lapide = fileReader.readBoolean(); // see if movie is valid
                 if (lapide) {
-                    if (id == x) {
-                        System.out.println("Id selecionado: " + id);
-
-                        movie = new Movie();
-
-                        // setando as informações do filme cujo id está sendo buscado
-                        movie.set_movieId(id);
-
-                        fileReader.readInt();
-                        movie.set_title(fileReader.readUTF());
-
-                        int n = fileReader.readInt();// read the number of genres in the multivalued atribute
-                        String[] s = new String[n]; 
-                        for (int i = 0; i < n; i++) { 
-                            fileReader.readInt();
-                            s[i] = fileReader.readUTF();
-                        }
-                        movie.set_duration(fileReader.readInt());
-
-                        fileReader.readInt();
-                        movie.set_contentType(fileReader.readUTF());
-
-                        movie.set_dateAdded(fileReader.readUTF());
-
+                    fileReader.readInt();
+                    movieId = fileReader.readUTF();
+                    if (movieId.equals(id)) { // see if the id is the one being searched
+                        fileReader.seek(lapidePos);//return to lapide's position
+                        fileReader.writeBoolean(false); //delete the archive
+                        fileReader.skipBytes(10);//skip the bytes returned
+                        System.out.println("Filme deletado:\n " + readMovie(sizeMovie, id, false));
+                        break;
+                    } else {
+                        fileReader.skipBytes(sizeMovie - 11); // if is not the one being searched go to next one
                     }
+                } else {
+                    fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
                 }
             }
-            return movie;
-
-        } catch (IOException e) { // Id não foi encontrado
-            System.err.println("Id não encontrado");
-        }
-        return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        
     }
-
-    public void update() {
-
-    }
-
-    public void delete() {
-
-    }
+}
 
     public void clear() {
         file.delete();

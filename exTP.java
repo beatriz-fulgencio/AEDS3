@@ -31,12 +31,13 @@ public class exTP {
 
         read(byteFileRandler);
 
-       //byteFileRandler.clear();
+       byteFileRandler.clear();
         //byteFileRandler.read("0000");
 
         //byteFileRandler.create();
-       byteFileRandler.delete("0099");
-       System.out.println(byteFileRandler.select("0099"));
+    //    byteFileRandler.delete("0099");
+       byteFileRandler.update("0017");
+    System.out.println(byteFileRandler.select("0017"));
     }
 
 }

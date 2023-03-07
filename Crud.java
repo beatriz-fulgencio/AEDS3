@@ -6,6 +6,7 @@ import javax.print.PrintException;
 public class Crud {
     private File file;
     private RandomAccessFile fileReader;
+    private long position;
 
     Crud(String file) throws FileNotFoundException {
         this.file = new File(file); // creates the "file" file
@@ -96,6 +97,7 @@ public class Crud {
 
         try {
             while (fileReader.getFilePointer() < fileReader.length()) {
+                position = fileReader.getFilePointer();
                 sizeMovie = fileReader.readInt();
                 lapide = fileReader.readBoolean();
                 if (lapide) {
@@ -157,39 +159,55 @@ public class Crud {
         return movie;
     }
 
-    public void update() {
+    public void update(String id) throws Exception{
+        Movie movie = select(id);
+        Scanner sc = new Scanner(System.in);
+        if(movie != null){
+            System.out.println("Filme selecionado: ----------------");
+            System.out.println(movie);
+            System.out.println("--------------------------");
+            System.out.println("Qual informação deseja alterar:\n a)Nome do filme\nb)Gêneros\nc)Duração\nd)Tipo do conteúdo\ne)Data de lançamento");
+            String option = sc.nextLine();
 
+            switch(option){
+                case "a": case"A": 
+                    System.out.println("Digite o novo título:");
+                    movie.set_title(sc.nextLine());
+                    break;
+                case "b": case "B":
+                    System.out.println("Digite o novos gêneros (separe-os com vírgula):");
+                    movie.set_genres(sc.nextLine().split(","));
+                    break;
+                case "c": case "C": 
+                    System.out.println("Digite a nova duração (em minutos):");
+                    movie.set_duration(Integer.parseInt(sc.nextLine()));
+                    break;
+                case "d": case "D": 
+                    System.out.println("Digite o novo tipo de conteúdo:");
+                    movie.set_contentType(sc.nextLine());
+                    break;
+                case "e": case "E":
+                    System.out.println("Digite a nova data de lançamento (MMM dd, YYYY)");
+                    movie.set_dateAdded(sc.nextLine());
+                    break;
+                default:
+                    System.out.println("Arquivo não alterado");
+            }
+            sc.close();
+
+             byte[] ba = movie.toByteArray();
+             fileReader.seek(position);
+             int sizeLastMovie = fileReader.readInt();
+             if(ba.length<=sizeLastMovie){
+                fileReader.write(ba);
+             }else{
+                fileReader.writeBoolean(false);
+                writeMovie(movie);
+             }
+
+        }
     }
 
-    // public void update(Movie m) {
-    // fileReader.seek(0); // set the poiter at the beggining of the file
-    // fileReader.readUTF();// skip last id
-    // int sizeMovie;
-    // boolean lapide;
-    // String movieId;
-    // try {
-    // while (fileReader.getFilePointer() < fileReader.length()) { // while the file
-    // is not done
-    // sizeMovie = fileReader.readInt(); // read the size of the object being read
-    // lapide = fileReader.readBoolean(); // see if movie is valid
-    // if (lapide) {
-    // fileReader.readInt();
-    // movieId = fileReader.readUTF();
-    // if (movieId.equals(id)) { // see if the id is the one being searched
-    // System.out.println(readMovie(sizeMovie, id, lapide));
-    // break;
-    // } else {
-    // fileReader.skipBytes(sizeMovie - 11); // if is not the one being searched go
-    // to next one
-    // }
-    // } else {
-    // fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
-    // }
-    // }
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
 
     public void delete(String id) throws IOException {
         fileReader.seek(0); // set the poiter at the beggining of the file

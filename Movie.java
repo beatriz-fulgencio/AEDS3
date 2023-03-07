@@ -209,6 +209,37 @@ public class Movie {
         return baos.toByteArray();
     }
 
+
+    public void fromByteArray(byte[] ba) throws Exception{
+        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
+        DataInputStream dis = new DataInputStream(bais);
+
+        valid = dis.readBoolean();
+
+        dis.readInt();
+        set_movieId(dis.readUTF());
+
+        dis.readInt();
+        set_title(dis.readUTF());
+
+        int length = dis.readInt();
+        String[] generos = new String[length];
+        for(int i = 0; i< length; i++){
+            generos[i] = dis.readUTF();
+        }
+        set_genres(generos);
+
+
+        set_duration(dis.readInt());
+
+        dis.readInt();
+        set_contentType(dis.readUTF());
+
+        dis.readInt();
+        set_dateAdded(dis.readUTF());
+    }
+
+
     public String toString() {
         String genre="";
         for(String s: this.genres){

@@ -36,8 +36,9 @@ public class exTP {
 
         //byteFileRandler.create();
     //    byteFileRandler.delete("0099");
-       byteFileRandler.update("0017");
-    System.out.println(byteFileRandler.select("0017"));
+       byteFileRandler.update("0002");
+        System.out.println(byteFileRandler.select("0002"));
+        System.out.println(byteFileRandler.select("0003"));
     }
 
 }

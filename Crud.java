@@ -204,6 +204,7 @@ public class Crud {
                 fileReader.writeBoolean(false);
                 writeMovie(movie);
              }
+             System.out.println();
 
         }
     }

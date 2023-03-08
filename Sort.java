@@ -5,15 +5,39 @@ public class Sort {
      /* Intercalação balanceada comum */
     
     public static void intercalacaoBalanceadaComum() throws IOException {
-        RandomAccessFile arq = new RandomAccessFile("arquivo.txt", "rw");
+        RandomAccessFile fileReader = new RandomAccessFile("arquivo.txt", "rw");
 
         // DISTRIBUIÇAO
-        arq.seek(0); // posiciona o ponteiro no início do arquivo
-        int cabecalho = arq.readInt(); // descobre qual o id do último registro do arquivo
-        int pos = 4; // posição do primeiro registro
-        int tam = 0;
+        fileReader.seek(0); // set the poiter at the beggining of the file
+        fileReader.readUTF();// skip last id
+
         Movie[] array = new Movie[100];
         boolean eof = false;
+
+        for (int i = 0; i < 100; i++) { // cria o array de Movies
+            array[i] = new Movie();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        int pos = 4; // posição do primeiro registro
+        int tam = 0;
 
         for (int i = 0; i < 100; i++) { // cria o array de Movies
             array[i] = new Movie();

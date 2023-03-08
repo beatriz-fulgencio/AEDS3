@@ -20,10 +20,11 @@ public class Sort {
         Movie[] array = new Movie[100];
 
 
-        int currentElement = 0; // contabiliza os elementos do array
          
         while(fileReader.getFilePointer() < fileReader.length()){
-            if (currentElement < 100) {
+            int currentElement = 0; // contabiliza os elementos do array
+            
+            while (currentElement < 100) {
                 array[currentElement] = new Movie();
                 int sizeMovie = fileReader.readInt();
                 position = fileReader.getFilePointer();
@@ -31,6 +32,9 @@ public class Sort {
                 fileReader.seek(position);
                 fileReader.skipBytes(sizeMovie);
             }
+
+
+
         }
 
 
@@ -141,6 +145,9 @@ public class Sort {
 
 
         /* Quicksort -> utilizado para ordenação em memória principal */
+        public void quicksort(Movie[]vetor){
+            quicksort(vetor, vetor[0], vetor[vetor.length-1]);
+        }
 
     private void quicksort(Movie[] vetor, int inicio, int fim) {
         if (fim > inicio) {

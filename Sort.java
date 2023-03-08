@@ -12,17 +12,17 @@ public class Sort {
         fileReader = new RandomAccessFile(file, "rw"); // opens the file in read and write mode
     }
 
-    public void intercalacaoBalanceadaComum() throws IOException {
+    public void intercalacaoBalanceadaComum() throws Exception {
 
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id
 
         Movie[] array = new Movie[100];
 
+        int currentElement = 0; // count the array elements
+        int fileControl = 0;
 
-        int currentElement = 0; // contabiliza os elementos do array
-         
-        while(fileReader.getFilePointer() < fileReader.length()){
+        while (fileReader.getFilePointer() < fileReader.length()) {
             if (currentElement < 100) {
                 array[currentElement] = new Movie();
                 int sizeMovie = fileReader.readInt();
@@ -30,85 +30,98 @@ public class Sort {
                 writeMovie(array[currentElement]);
                 fileReader.seek(position);
                 fileReader.skipBytes(sizeMovie);
+            } else {
+                array = quicksort(array, 0, (currentElement - 1));  // sort the 100 elements
+
+                // 2 ways:
+                if (fileControl % 2 == 0) {
+                    // add arrays to first file
+                    for (int i=0; i<100; i++) {
+                        // add array[currentElement] to "arquivo1.txt"
+                    }
+                } else {
+                    // add arrays to second file
+                    for (int i=0; i<100; i++) {
+                        // add array[currentElement] to "arquivo2.txt"
+                    }
+                }
             }
         }
 
+        RandomAccessFile file1 = new RandomAccessFile("arquivo1.txt", "rw");
+        RandomAccessFile file2 = new RandomAccessFile("arquivo2.txt", "rw");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        int qualArq = 0; // define o arquivo que receberá o array de registros
-        int elementoArray = 0; // contabiliza os elementos do array
-
-        do {
-            // Preenche o array
-            if (elementoArray < 100 && !eof) {
-                arq.seek(pos); // posiciona o ponteiro no inicio do proximo registro
-                boolean lapide = arq.readBoolean(); // leitura da lapide
-                tam = arq.readInt(); // leitura do tamanho do registro
-                if (lapide == true) { // verifica se o registro e valido
-                    byte[] arrayByte = new byte[tam];
-                    arq.read(arrayByte); // leitura do array de bytes
-                    array[elementoArray].fromByteArray(arrayByte); // transforma o array de bytes em um objeto Movie
-
-                    // System.out.println(elementoArray +" "+ array[elementoArray].getId());
-
-                    if (array[elementoArray].get_movieId().equals(cabecalho)) { // testa se o arquivo de leitura chegou
-                                                                                // no fim
-                        eof = true;
-                    }
-                    elementoArray++; // acrescenta 1 para acompanhar a proxima posiçao
-                }
-                pos += tam + 4 + 1; // adiciona a quantidade de bytes para chegar no inicio do proximo registro
-
-                // Segunda parte - Array ja esta preenchido, então será transferido para o
-                // proximo arquivo
-            } else {
-                array = quicksort(array, 0, elementoArray - 1); // ordenação interna
-                /*
-                 * for(int i=0; i< array.length; i++){
-                 * System.out.println(array[i].getId() + " " + array[i].getTitle());
-                 * }
-                 */
-                if (qualArq % 2 == 0) { // se o contador de arquivo for par, o vetor sera inserido no primeiro arquivo
-                    for (int i = 0; i < elementoArray; i++) {
-                        writeArq(array[i], "arquivo1.txt");
-                    }
-                } else { // caso contrario, o vetor sera inserido no segundo arquivo
-                    for (int i = 0; i < elementoArray; i++) {
-                        writeArq(array[i], "arquivo2.txt");
-                    }
-                }
-                // essa parte so é importante quando o vetor não possui 500 elementos, isso é,
-                // quando o arquivo lido chego no fim
-                if (elementoArray == 500) {
-                    qualArq++; // troca o arquivo que ira receber o proximo array
-                    elementoArray = 0; // para o array ser preenchido novamente, é necessario zerar o contador
-                } else { // se o vetor possuir menos que 500 elementos, significa que a distribuiçao
-                         // chegou ao fim
-                    elementoArray = -1;
-                }
-
-            }
-        } while (!eof || elementoArray >= 0);
     }
 
 
+
+
+    // int qualArq = 0; // define o arquivo que receberá o array de registros
+    // int elementoArray = 0; // contabiliza os elementos do array
+
+    // do {
+    // // Preenche o array
+    // if (elementoArray < 100 && !eof) {
+    // arq.seek(pos); // posiciona o ponteiro no inicio do proximo registro
+    // boolean lapide = arq.readBoolean(); // leitura da lapide
+    // tam = arq.readInt(); // leitura do tamanho do registro
+    // if (lapide == true) { // verifica se o registro e valido
+    // byte[] arrayByte = new byte[tam];
+    // arq.read(arrayByte); // leitura do array de bytes
+    // array[elementoArray].fromByteArray(arrayByte); // transforma o array de bytes
+    // em um objeto Movie
+
+    // // System.out.println(elementoArray +" "+ array[elementoArray].getId());
+
+    // if (array[elementoArray].get_movieId().equals(cabecalho)) { // testa se o
+    // arquivo de leitura chegou
+    // // no fim
+    // eof = true;
+    // }
+    // elementoArray++; // acrescenta 1 para acompanhar a proxima posiçao
+    // }
+    // pos += tam + 4 + 1; // adiciona a quantidade de bytes para chegar no inicio
+    // do proximo registro
+
+    // // Segunda parte - Array ja esta preenchido, então será transferido para o
+    // // proximo arquivo
+    // } else {
+    // array = quicksort(array, 0, elementoArray - 1); // ordenação interna
+    // /*
+    // * for(int i=0; i< array.length; i++){
+    // * System.out.println(array[i].getId() + " " + array[i].getTitle());
+    // * }
+    // */
+    // if (qualArq % 2 == 0) { // se o contador de arquivo for par, o vetor sera
+    // inserido no primeiro arquivo
+    // for (int i = 0; i < elementoArray; i++) {
+    // writeArq(array[i], "arquivo1.txt");
+    // }
+    // } else { // caso contrario, o vetor sera inserido no segundo arquivo
+    // for (int i = 0; i < elementoArray; i++) {
+    // writeArq(array[i], "arquivo2.txt");
+    // }
+    // }
+    // // essa parte so é importante quando o vetor não possui 500 elementos, isso
+    // é,
+    // // quando o arquivo lido chego no fim
+    // if (elementoArray == 500) {
+    // qualArq++; // troca o arquivo que ira receber o proximo array
+    // elementoArray = 0; // para o array ser preenchido novamente, é necessario
+    // zerar o contador
+    // } else { // se o vetor possuir menos que 500 elementos, significa que a
+    // distribuiçao
+    // // chegou ao fim
+    // elementoArray = -1;
+    // }
+
+    // }
+    // } while (!eof || elementoArray >= 0);
+    // }
+
     private void writeMovie(Movie movie) throws Exception {
-        
-          // set if is valide
+
+        // set if is valide
         movie.set_lapide(fileReader.readBoolean());
 
         fileReader.readInt();
@@ -139,16 +152,16 @@ public class Sort {
 
     }
 
+    /* Quicksort -> utilizado para ordenação em memória principal */
 
-        /* Quicksort -> utilizado para ordenação em memória principal */
-
-    private void quicksort(Movie[] vetor, int inicio, int fim) {
+    private Movie[] quicksort(Movie[] vetor, int inicio, int fim) {
         if (fim > inicio) {
             // chamadas recursivas
             int pivo = dividir(vetor, inicio, fim);
             quicksort(vetor, inicio, pivo - 1);
             quicksort(vetor, pivo + 1, fim);
         }
+        return vetor;
     }
 
     private int dividir(Movie[] vetor, int inicio, int fim) {

@@ -7,17 +7,22 @@ public class Sort {
     public static void intercalacaoBalanceadaComum() throws IOException {
         RandomAccessFile fileReader = new RandomAccessFile("arquivo.txt", "rw");
 
-        // DISTRIBUIÇAO
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id
 
         Movie[] array = new Movie[100];
-        boolean eof = false;
 
         for (int i = 0; i < 100; i++) { // cria o array de Movies
             array[i] = new Movie();
         }
 
+        int elementCount = 0; // contabiliza os elementos do array
+
+        do {
+            if (elementCount < 100) {
+                
+            }
+        } while ();
 
 
 
@@ -34,14 +39,6 @@ public class Sort {
 
 
 
-
-
-        int pos = 4; // posição do primeiro registro
-        int tam = 0;
-
-        for (int i = 0; i < 100; i++) { // cria o array de Movies
-            array[i] = new Movie();
-        }
 
         int qualArq = 0; // define o arquivo que receberá o array de registros
         int elementoArray = 0; // contabiliza os elementos do array

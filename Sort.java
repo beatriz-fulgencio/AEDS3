@@ -6,12 +6,15 @@ public class Sort {
     private RandomAccessFile fileReader;
     private long position;
 
-
     File file_1 = new File("arquivo1.txt");
     RandomAccessFile file1 = new RandomAccessFile("arquivo1.txt", "rw");
 
     File file_2 = new File("arquivo2.txt");
     RandomAccessFile file2 = new RandomAccessFile("arquivo2.txt", "rw");
+
+    File file_3 = new File("arquivo3.txt");
+    RandomAccessFile file3 = new RandomAccessFile("arquivo3.txt", "rw");
+
     /* Intercalação balanceada comum */
 
     Sort(String file) throws FileNotFoundException {
@@ -21,17 +24,15 @@ public class Sort {
 
     public void intercalacaoBalanceadaComum() throws Exception {
 
-        int fileControl=0;
+        int fileControl = 0;
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id
 
         Movie[] array = new Movie[10];
 
-       
-         
         int arq = 0; // contabiliza os elementos do array
 
-       while(/*fileReader.getFilePointer() < fileReader.length()*/arq<20 ){
+        while (/* fileReader.getFilePointer() < fileReader.length() */arq < 20) {
             int currentElement = 0; // contabiliza os elementos do array
             while (currentElement < 10) {
                 array[currentElement] = new Movie();
@@ -46,17 +47,16 @@ public class Sort {
 
             quicksort(array);
 
-
-             // 2 ways:
-             if (fileControl % 2 == 0) {
+            // 2 ways:
+            if (fileControl % 2 == 0) {
                 // add arrays to first file
-                for (int i=0; i<10; i++) {
+                for (int i = 0; i < 10; i++) {
                     // add array[currentElement] to "arquivo1.txt"
                     writeMovie(array[i], file1);
                 }
             } else {
                 // add arrays to second file
-                for (int i=0; i<10; i++) {
+                for (int i = 0; i < 10; i++) {
                     // add array[currentElement] to "arquivo2.txt"
                     writeMovie(array[i], file2);
                 }
@@ -64,76 +64,36 @@ public class Sort {
             fileControl++;
         }
 
+        /* Intercalação */
 
+        // compare array[i] from file 1 to array[i] from file 2
+        for (int i = 0; i < 200; i++) {
 
+            // reads register from file 1
+            if(i==0) file1.seek(4); // set the pointer at the 4th byte
+            file1.readBoolean(); // checks if the movie is valid
+            int sizeMovie1 = file1.readInt(); // reads the register size
+            long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+            String id1 = file1.readUTF(); // reads the movie id
 
+            // reads register from file 2
+            if(i==0) file2.seek(4); // set the pointer at the 4th byte
+            file2.readBoolean(); // checks if the movie is valid
+            int sizeMovie2 = file2.readInt(); // reads the register size
+            long position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
+            String id2 = file2.readUTF(); // reads the movie id
 
-
-
-
-
-
-
-
-
-
-
-
-
-        // int qualArq = 0; // define o arquivo que receberá o array de registros
-        // int elementoArray = 0; // contabiliza os elementos do array
-
-        // do {
-        //     // Preenche o array
-        //     if (elementoArray < 100 && !eof) {
-        //         arq.seek(pos); // posiciona o ponteiro no inicio do proximo registro
-        //         boolean lapide = arq.readBoolean(); // leitura da lapide
-        //         tam = arq.readInt(); // leitura do tamanho do registro
-        //         if (lapide == true) { // verifica se o registro e valido
-        //             byte[] arrayByte = new byte[tam];
-        //             arq.read(arrayByte); // leitura do array de bytes
-        //             array[elementoArray].fromByteArray(arrayByte); // transforma o array de bytes em um objeto Movie
-
-        //             // System.out.println(elementoArray +" "+ array[elementoArray].getId());
-
-        //             if (array[elementoArray].get_movieId().equals(cabecalho)) { // testa se o arquivo de leitura chegou
-        //                                                                         // no fim
-        //                 eof = true;
-        //             }
-        //             elementoArray++; // acrescenta 1 para acompanhar a proxima posiçao
-        //         }
-        //         pos += tam + 4 + 1; // adiciona a quantidade de bytes para chegar no inicio do proximo registro
-
-        //         // Segunda parte - Array ja esta preenchido, então será transferido para o
-        //         // proximo arquivo
-        //     } else {
-        //         array = quicksort(array, 0, elementoArray - 1); // ordenação interna
-        //         /*
-        //          * for(int i=0; i< array.length; i++){
-        //          * System.out.println(array[i].getId() + " " + array[i].getTitle());
-        //          * }
-        //          */
-        //         if (qualArq % 2 == 0) { // se o contador de arquivo for par, o vetor sera inserido no primeiro arquivo
-        //             for (int i = 0; i < elementoArray; i++) {
-        //                 writeArq(array[i], "arquivo1.txt");
-        //             }
-        //         } else { // caso contrario, o vetor sera inserido no segundo arquivo
-        //             for (int i = 0; i < elementoArray; i++) {
-        //                 writeArq(array[i], "arquivo2.txt");
-        //             }
-        //         }
-        //         // essa parte so é importante quando o vetor não possui 500 elementos, isso é,
-        //         // quando o arquivo lido chego no fim
-        //         if (elementoArray == 500) {
-        //             qualArq++; // troca o arquivo que ira receber o proximo array
-        //             elementoArray = 0; // para o array ser preenchido novamente, é necessario zerar o contador
-        //         } else { // se o vetor possuir menos que 500 elementos, significa que a distribuiçao
-        //                  // chegou ao fim
-        //             elementoArray = -1;
-        //         }
-
-        //     }
-        // } while (!eof || elementoArray >= 0);
+            if (id1.compareTo(id2) < 0) {
+                writeMovie(array[i] /* ??? */, file3);  
+                file1.seek(position1);
+                file1.skipBytes(sizeMovie1);
+            }
+            else {
+                writeMovie(array[i] /* ??? */, file3);
+                file2.seek(position2);
+                file2.skipBytes(sizeMovie2);
+            }
+        }
     }
 
     public void writeMovie(Movie movie, RandomAccessFile file) throws IOException {
@@ -144,10 +104,9 @@ public class Sort {
         file.write(ba); // writes the object byte array
     }
 
-
     private void setMovie(Movie movie) throws Exception {
-        
-          // set if is valide
+
+        // set if is valide
         movie.set_lapide(fileReader.readBoolean());
 
         fileReader.readInt();
@@ -178,12 +137,10 @@ public class Sort {
 
     }
 
-
-
-        /* Quicksort -> utilizado para ordenação em memória principal */
-        public void quicksort(Movie[]vetor){
-            quicksort(vetor, 0,vetor.length-1);
-        }
+    /* Quicksort -> utilizado para ordenação em memória principal */
+    public void quicksort(Movie[] vetor) {
+        quicksort(vetor, 0, vetor.length - 1);
+    }
 
     private void quicksort(Movie[] vetor, int inicio, int fim) {
         if (fim > inicio) {
@@ -229,8 +186,7 @@ public class Sort {
         vetor[j] = temp;
     }
 
-
-    public void clear(){
+    public void clear() {
         file_1.delete();
         file_2.delete();
     }

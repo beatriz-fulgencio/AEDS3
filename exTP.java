@@ -33,11 +33,11 @@ public class exTP {
 
        read(byteFileRandler);
 
-       //byteFileRandler.clear(); 
+    //    byteFileRandler.clear(); 
         //byteFileRandler.read("0000");
 
 
-       byteFileRandler.update("0002");
+    //    byteFileRandler.update("0002");
        
         
         //byteFileRandler.update("0009");
@@ -45,7 +45,7 @@ public class exTP {
 
         Sort fileSort = new Sort("movies.db");
 
-       //fileSort.clear();
+    //    fileSort.clear();
         
         fileSort.intercalacaoBalanceadaComum();
         

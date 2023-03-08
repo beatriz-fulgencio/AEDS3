@@ -1,28 +1,37 @@
 import java.io.*;
 
 public class Sort {
-    
-     /* Intercalação balanceada comum */
-    
-    public static void intercalacaoBalanceadaComum() throws IOException {
-        RandomAccessFile fileReader = new RandomAccessFile("arquivo.txt", "rw");
+
+    private File file;
+    private RandomAccessFile fileReader;
+    private long position;
+    /* Intercalação balanceada comum */
+
+    Sort(String file) throws FileNotFoundException {
+        this.file = new File(file); // creates the "file" file
+        fileReader = new RandomAccessFile(file, "rw"); // opens the file in read and write mode
+    }
+
+    public void intercalacaoBalanceadaComum() throws IOException {
 
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id
 
         Movie[] array = new Movie[100];
 
-        for (int i = 0; i < 100; i++) { // cria o array de Movies
-            array[i] = new Movie();
-        }
 
-        int elementCount = 0; // contabiliza os elementos do array
-
-        do {
-            if (elementCount < 100) {
-                
+        int currentElement = 0; // contabiliza os elementos do array
+         
+        while(fileReader.getFilePointer() < fileReader.length()){
+            if (currentElement < 100) {
+                array[currentElement] = new Movie();
+                int sizeMovie = fileReader.readInt();
+                position = fileReader.getFilePointer();
+                writeMovie(array[currentElement]);
+                fileReader.seek(position);
+                fileReader.skipBytes(sizeMovie);
             }
-        } while ();
+        }
 
 
 
@@ -97,8 +106,41 @@ public class Sort {
     }
 
 
+    private void writeMovie(Movie movie) throws Exception {
+        
+          // set if is valide
+        movie.set_lapide(fileReader.readBoolean());
 
-    /* Quicksort -> utilizado para ordenação em memória principal */
+        fileReader.readInt();
+
+        // set movie id
+        movie.set_movieId(fileReader.readUTF());
+
+        // read and set the rest of the movie atributes ---
+
+        fileReader.readInt();
+        movie.set_title(fileReader.readUTF()); // set title
+
+        int n = fileReader.readInt();// read the number of genres in the multivalued atribute
+        String[] s = new String[n]; // create array
+        for (int i = 0; i < n; i++) { // set array
+            fileReader.readInt();
+            s[i] = fileReader.readUTF();
+        }
+        movie.set_genres(s); // set genres
+
+        movie.set_duration(fileReader.readInt()); // set duratioin of the movie
+
+        fileReader.readInt();
+        movie.set_contentType(fileReader.readUTF()); // set the content type of the movie
+
+        fileReader.readInt();
+        movie.set_dateAdded(fileReader.readUTF()); // set the date of the movie
+
+    }
+
+
+        /* Quicksort -> utilizado para ordenação em memória principal */
 
     private void quicksort(Movie[] vetor, int inicio, int fim) {
         if (fim > inicio) {

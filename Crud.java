@@ -25,7 +25,7 @@ public class Crud {
         fileReader.write(ba); // writes the object byte array
     }
 
-    private Movie readMovie(int fileSize, String id, boolean lapide) throws Exception {
+    public Movie readMovie(int fileSize, String id, boolean lapide) throws Exception {
         Movie movie = new Movie(); // movie object that will be returned
 
         // set already read information---

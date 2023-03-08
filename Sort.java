@@ -15,6 +15,9 @@ public class Sort {
     File file_3 = new File("arquivo3.txt");
     RandomAccessFile file3 = new RandomAccessFile("arquivo3.txt", "rw");
 
+    File file_4 = new File("arquivo4.txt");
+    RandomAccessFile file4 = new RandomAccessFile("arquivo4.txt", "rw");
+
     /* Intercalação balanceada comum */
 
     Sort(String file) throws FileNotFoundException {
@@ -67,31 +70,38 @@ public class Sort {
         /* Intercalação */
 
         // compare array[i] from file 1 to array[i] from file 2
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 20 /* 100 */; i++) {
 
             // reads register from file 1
-            if(i==0) file1.seek(4); // set the pointer at the 4th byte
-            file1.readBoolean(); // checks if the movie is valid
+            if (i == 0) file1.seek(0); // set the pointer at the 4th byte
+            long firstPosition1 = file1.getFilePointer();
             int sizeMovie1 = file1.readInt(); // reads the register size
             long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+            file1.readBoolean(); // checks if the register is valid
+            file1.readInt(); // reads 4
             String id1 = file1.readUTF(); // reads the movie id
 
             // reads register from file 2
-            if(i==0) file2.seek(4); // set the pointer at the 4th byte
-            file2.readBoolean(); // checks if the movie is valid
+            if (i == 0) file2.seek(0); // set the pointer at the 4th byte
+            long firstPosition2 = file2.getFilePointer();
             int sizeMovie2 = file2.readInt(); // reads the register size
             long position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
+            file2.readBoolean(); // checks if the register is valid
+            file2.readInt(); // reads 4
             String id2 = file2.readUTF(); // reads the movie id
 
             if (id1.compareTo(id2) < 0) {
-                writeMovie(array[i] /* ??? */, file3);  
+                if (i < 2 /* 50 */) writeMovie(array[i] /* ??? */, file3);
+                else writeMovie(array[i] /* ??? */, file4); // ESCREVE CERTO NO FILE4???
                 file1.seek(position1);
                 file1.skipBytes(sizeMovie1);
-            }
-            else {
-                writeMovie(array[i] /* ??? */, file3);
+                file2.seek(firstPosition2);
+            } else {
+                if (i < 10 /* 50 */) writeMovie(array[i] /* ??? */, file3);
+                else writeMovie(array[i] /* ??? */, file4);
                 file2.seek(position2);
                 file2.skipBytes(sizeMovie2);
+                file1.seek(firstPosition1);
             }
         }
     }

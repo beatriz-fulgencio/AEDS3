@@ -13,7 +13,7 @@ public class exTP {
         int i = 0;
         try {
             sc = new Scanner(file);
-            while (/*sc.hasNextLine()*/ i<20) {
+            while (/* sc.hasNextLine() */ i < 20) {
                 Movie movie = new Movie(qntde++);
                 movie.read(sc.nextLine());
                 bfr.writeMovie(movie);
@@ -31,26 +31,23 @@ public class exTP {
     public static void main(String[] args) throws Exception {
         Crud byteFileRandler = new Crud("movies.db");
 
-       read(byteFileRandler);
+        read(byteFileRandler);
 
-    //    byteFileRandler.clear(); 
-        //byteFileRandler.read("0000");
+        // byteFileRandler.clear();
+        // byteFileRandler.read("0000");
 
+        // byteFileRandler.update("0002");
 
-    //    byteFileRandler.update("0002");
-       
-        
-        //byteFileRandler.update("0009");
-
+        // byteFileRandler.update("0009");
 
         Sort fileSort = new Sort("movies.db");
 
-    //    fileSort.clear();
-        
+        // fileSort.clear();
+
         fileSort.intercalacaoBalanceadaComum();
-        
-        //byteFileRandler.create();
-    //    byteFileRandler.delete("0099");
+
+        // byteFileRandler.create();
+        // byteFileRandler.delete("0099");
         // byteFileRandler.update("0002");
         // System.out.println(byteFileRandler.select("0002"));
         // System.out.println(byteFileRandler.select("0003"));

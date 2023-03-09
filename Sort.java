@@ -113,6 +113,17 @@ public class Sort {
 
                 if (id1.compareTo(id2) < 0 && cont1 < 4) {
                     writeMovie(movie1, file3);
+                    file1.seek(position1);
+                    file1.skipBytes(sizeMovie1);
+                    file2.seek(firstPosition2);
+                } else {
+                    writeMovie(movie2, file3);
+                    file2.seek(position2);
+                    file2.skipBytes(sizeMovie2);
+                    file1.seek(firstPosition1);
+                }
+            } else { /* writes on file4 -> 2 * array[i] */
+                if (id1.compareTo(id2) < 0 && cont2 < 4) {
                     writeMovie(movie1, file4);
                     file1.seek(position1);
                     file1.skipBytes(sizeMovie1);

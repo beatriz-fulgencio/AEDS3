@@ -67,38 +67,46 @@ public class Sort {
             fileControl++;
         }
 
-        /* Intercalação */
+        /* Primeira Intercalação */
+        
+        /* - Lidar com eof
+            - Fazer intercalação entre file3 e file4
+            - Um não pode entrar no outro
+ */
 
+         Movie movie1 = new Movie();
+         Movie movie2 = new Movie();
         // compare array[i] from file 1 to array[i] from file 2
         for (int i = 0; i < 20 /* 100 */; i++) {
-
             // reads register from file 1
-            if (i == 0) file1.seek(0); // set the pointer at the 4th byte
+            if (i == 0)
+                file1.seek(0); // set the pointer at the 4th byte
             long firstPosition1 = file1.getFilePointer();
             int sizeMovie1 = file1.readInt(); // reads the register size
             long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
-            file1.readBoolean(); // checks if the register is valid
+            boolean b1 = file1.readBoolean(); // checks if the register is valid
             file1.readInt(); // reads 4
             String id1 = file1.readUTF(); // reads the movie id
+            movie1 = readMovie(sizeMovie1, id1, b1);
 
             // reads register from file 2
-            if (i == 0) file2.seek(0); // set the pointer at the 4th byte
+            if (i == 0)
+                file2.seek(0); // set the pointer at the 4th byte
             long firstPosition2 = file2.getFilePointer();
             int sizeMovie2 = file2.readInt(); // reads the register size
             long position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
-            file2.readBoolean(); // checks if the register is valid
+            boolean b2 = file2.readBoolean(); // checks if the register is valid
             file2.readInt(); // reads 4
             String id2 = file2.readUTF(); // reads the movie id
+            movie2 = readMovie(sizeMovie2, id2, b2);
 
             if (id1.compareTo(id2) < 0) {
-                if (i < 2 /* 50 */) writeMovie(array[i] /* ??? */, file3);
-                else writeMovie(array[i] /* ??? */, file4); // ESCREVE CERTO NO FILE4???
+                    writeMovie(movie1 /* ??? */, file3);
                 file1.seek(position1);
                 file1.skipBytes(sizeMovie1);
                 file2.seek(firstPosition2);
             } else {
-                if (i < 10 /* 50 */) writeMovie(array[i] /* ??? */, file3);
-                else writeMovie(array[i] /* ??? */, file4);
+                    writeMovie(movie2/* ??? */, file3);
                 file2.seek(position2);
                 file2.skipBytes(sizeMovie2);
                 file1.seek(firstPosition1);
@@ -200,4 +208,39 @@ public class Sort {
         file_1.delete();
         file_2.delete();
     }
+
+    private Movie readMovie(int fileSize, String id, boolean lapide) throws Exception {
+        Movie movie = new Movie(); // movie object that will be returned
+
+        // set already read information---
+
+        // set if is valide
+        movie.set_lapide(lapide);
+        // set movie id
+        movie.set_movieId(id);
+
+        // read and set the rest of the movie atributes ---
+
+        fileReader.readInt();
+        movie.set_title(fileReader.readUTF()); // set title
+
+        int n = fileReader.readInt();// read the number of genres in the multivalued atribute
+        String[] s = new String[n]; // create array
+        for (int i = 0; i < n; i++) { // set array
+            fileReader.readInt();
+            s[i] = fileReader.readUTF();
+        }
+        movie.set_genres(s); // set genres
+
+        movie.set_duration(fileReader.readInt()); // set duratioin of the movie
+
+        fileReader.readInt();
+        movie.set_contentType(fileReader.readUTF()); // set the content type of the movie
+
+        fileReader.readInt();
+        movie.set_dateAdded(fileReader.readUTF()); // set the date of the movie
+
+        return movie;
+    }
+
 }

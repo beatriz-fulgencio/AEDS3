@@ -71,74 +71,149 @@ public class Sort {
 
         /*
          * - Lidar com eof
-         * - Fazer intercalação entre file3 e file4 
+         * - Fazer intercalação entre file3 e file4
          * - Um não pode entrar no outro
          */
 
         Movie movie1 = new Movie();
         Movie movie2 = new Movie();
+
+        file1.seek(0);
+        file2.seek(0);
+
         int cont1 = 0;
         int cont2 = 0;
- 
-        for(int u=0; u<4; u++){
 
-            u%2==0
-        }
-        // compare array[i] from file 1 to array[i] from file 2
-        for (int i = 0; i < 8 /* 100 */; i++) {
+        // for (int u = 0; u < 4; u++) {
 
-            // reads register from file 1
-            if (i == 0) {
-                file1.seek(0); // set the pointer at the 1st byte
+        // if (u % 2 == 0) { // file control
+        for (int i = 0; i < 8 /* 200 */; i++) {
+
+            String id1 = "";
+            String id2 = "";
+            int sizeMovie1 = 0;
+            int sizeMovie2 = 0;
+            long position1 = 0;
+            long position2 = 0;
+            long firstPosition1 = 0;
+            long firstPosition2 = 0;
+
+            if (cont1 < 10) {
+                firstPosition1 = file1.getFilePointer();
+                sizeMovie1 = file1.readInt(); // reads the register size
+                position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+                boolean b1 = file1.readBoolean(); // checks if the register is valid
+                file1.readInt(); // reads 4
+                id1 = file1.readUTF(); // reads the movie id
+                movie1 = readMovie(sizeMovie1, id1, b1, file1);
+                cont1++;
             }
-            long firstPosition1 = file1.getFilePointer();
-            int sizeMovie1 = file1.readInt(); // reads the register size
-            long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
-            boolean b1 = file1.readBoolean(); // checks if the register is valid
-            file1.readInt(); // reads 4
-            String id1 = file1.readUTF(); // reads the movie id
-            movie1 = readMovie(sizeMovie1, id1, b1, file1);
-            cont1++; // controls the block
 
-            // reads register from file 2
-            if (i == 0) {
-                file2.seek(0); // set the pointer at the 1st byte
+            if (cont2 < 10) {
+                firstPosition2 = file2.getFilePointer();
+                sizeMovie2 = file2.readInt(); // reads the register size
+                position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
+                boolean b2 = file2.readBoolean(); // checks if the register is valid
+                file2.readInt(); // reads 4
+                id2 = file2.readUTF(); // reads the movie id
+                movie2 = readMovie(sizeMovie2, id2, b2, file2);
+                cont2++;
             }
-            long firstPosition2 = file2.getFilePointer();
-            int sizeMovie2 = file2.readInt(); // reads the register size
-            long position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
-            boolean b2 = file2.readBoolean(); // checks if the register is valid
-            file2.readInt(); // reads 4
-            String id2 = file2.readUTF(); // reads the movie id
-            movie2 = readMovie(sizeMovie2, id2, b2, file2);
-            cont2++; // controls the block
 
-                if (id1.compareTo(id2) < 0 ) {
+            if (cont1 < 10 && cont2 < 10) {
+                if (id1.compareTo(id2) < 0) {
                     writeMovie(movie1, file3);
                     file1.seek(position1);
                     file1.skipBytes(sizeMovie1);
                     file2.seek(firstPosition2);
+                    cont2--;
                 } else {
                     writeMovie(movie2, file3);
                     file2.seek(position2);
                     file2.skipBytes(sizeMovie2);
                     file1.seek(firstPosition1);
+                    cont1--;
                 }
-             /* writes on file4 -> 2 * array[i] */
-                // if (id1.compareTo(id2) < 0) {
-                //     writeMovie(movie1, file4);
-                //     file1.seek(position1);
-                //     file1.skipBytes(sizeMovie1);
-                //     file2.seek(firstPosition2);
-                // } else {
-                //     writeMovie(movie2, file4);
-                //     file2.seek(position2);
-                //     file2.skipBytes(sizeMovie2);
-                //     file1.seek(firstPosition1);
-                // }
-            
+            } else if (cont1 < 10) {
+                writeMovie(movie1, file3);
+                file1.seek(position1);
+                file1.skipBytes(sizeMovie1);
+                // file2.seek(firstPosition2);
+                // cont2--;
+            } else if (cont2 < 10) {
+                writeMovie(movie2, file3);
+                file2.seek(position2);
+                file2.skipBytes(sizeMovie2);
+                // file1.seek(firstPosition1);
+                // cont1--;
+            }
         }
+        // } else {
+        for (int i = 0; i < 8 /* 200 */; i++) {
+
+            String id1 = "";
+            String id2 = "";
+            int sizeMovie1 = 0;
+            int sizeMovie2 = 0;
+            long position1 = 0;
+            long position2 = 0;
+            long firstPosition1 = 0;
+            long firstPosition2 = 0;
+
+            if (cont1 < 10) {
+                firstPosition1 = file1.getFilePointer();
+                sizeMovie1 = file1.readInt(); // reads the register size
+                position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+                boolean b1 = file1.readBoolean(); // checks if the register is valid
+                file1.readInt(); // reads 4
+                id1 = file1.readUTF(); // reads the movie id
+                movie1 = readMovie(sizeMovie1, id1, b1, file1);
+                cont1++;
+            }
+
+            if (cont2 < 10) {
+                firstPosition2 = file2.getFilePointer();
+                sizeMovie2 = file2.readInt(); // reads the register size
+                position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
+                boolean b2 = file2.readBoolean(); // checks if the register is valid
+                file2.readInt(); // reads 4
+                id2 = file2.readUTF(); // reads the movie id
+                movie2 = readMovie(sizeMovie2, id2, b2, file2);
+                cont2++;
+            }
+
+            if (cont1 < 10 && cont2 < 10) {
+                if (id1.compareTo(id2) < 0) {
+                    writeMovie(movie1, file4);
+                    file1.seek(position1);
+                    file1.skipBytes(sizeMovie1);
+                    file2.seek(firstPosition2);
+                    cont2--;
+                } else {
+                    writeMovie(movie2, file4);
+                    file2.seek(position2);
+                    file2.skipBytes(sizeMovie2);
+                    file1.seek(firstPosition1);
+                    cont1--;
+                }
+            } else if (cont1 < 10) {
+                writeMovie(movie1, file4);
+                file1.seek(position1);
+                file1.skipBytes(sizeMovie1);
+                // file2.seek(firstPosition2);
+                // cont2--;
+            } else if (cont2 < 10) {
+                writeMovie(movie2, file4);
+                file2.seek(position2);
+                file2.skipBytes(sizeMovie2);
+                // file1.seek(firstPosition1);
+                // cont1--;
+            }
+        }
+
     }
+    // }
+    // }
 
     public void writeMovie(Movie movie, RandomAccessFile file) throws IOException {
         byte[] ba = movie.toByteArray(); // creates a byte array from the movie information
@@ -234,6 +309,7 @@ public class Sort {
         file_1.delete();
         file_2.delete();
         file_3.delete();
+        file_4.delete();
     }
 
     private Movie readMovie(int fileSize, String id, boolean lapide, RandomAccessFile file) throws Exception {

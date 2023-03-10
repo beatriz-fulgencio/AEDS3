@@ -13,7 +13,7 @@ public class exTP {
         int i = 0;
         try {
             sc = new Scanner(file);
-            while (/* sc.hasNextLine() */ i < 20) {
+            while (/* sc.hasNextLine() */ i < 40) {
                 Movie movie = new Movie(qntde++);
                 movie.read(sc.nextLine());
                 bfr.writeMovie(movie);
@@ -33,7 +33,7 @@ public class exTP {
 
         read(byteFileRandler);
 
-        // byteFileRandler.clear();
+        //  byteFileRandler.clear();
         // byteFileRandler.read("0000");
 
         // byteFileRandler.update("0002");

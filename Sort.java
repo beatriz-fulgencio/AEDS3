@@ -31,13 +31,13 @@ public class Sort {
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id
 
-        Movie[] array = new Movie[10];
+        Movie[] array = new Movie[20];
 
         int arq = 0; // contabiliza os elementos do array
 
-        while (/* fileReader.getFilePointer() < fileReader.length() */arq < 20) {
+        while (/* fileReader.getFilePointer() < fileReader.length() */arq < 40) {
             int currentElement = 0; // contabiliza os elementos do array
-            while (currentElement < 10) {
+            while (currentElement < 20) {
                 array[currentElement] = new Movie();
                 int sizeMovie = fileReader.readInt();
                 position = fileReader.getFilePointer();
@@ -53,13 +53,13 @@ public class Sort {
             // 2 ways:
             if (fileControl % 2 == 0) {
                 // add arrays to first file
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 20; i++) {
                     // add array[currentElement] to "arquivo1.db"
                     writeMovie(array[i], file1);
                 }
             } else {
                 // add arrays to second file
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 20; i++) {
                     // add array[currentElement] to "arquivo2.db"
                     writeMovie(array[i], file2);
                 }
@@ -77,9 +77,6 @@ public class Sort {
 
         int cont1 = 0;
         int cont2 = 0;
-
-        long lastPosition1 = 0;
-        long lastPosition2 = 0;
 
         for (int u = 0; u < 4; u++) {
 
@@ -117,7 +114,7 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 10 && cont2 < 10) {
+                    if (cont1 < 20 && cont2 < 20) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file3);
                             file1.seek(position1);
@@ -132,14 +129,14 @@ public class Sort {
                             file1.seek(firstPosition1);
                             cont2++;
                         }
-                    } else if (cont1 < 10) {
+                    } else if (cont1 < 20) {
                         writeMovie(movie1, file3);
                         file1.seek(position1);
                         file1.skipBytes(sizeMovie1);
                         file2.seek(firstPosition2);
                         cont1++;
 
-                    } else if (cont2 < 10) {
+                    } else if (cont2 < 20) {
                         writeMovie(movie2, file3);
                         file2.seek(position2);
                         file2.skipBytes(sizeMovie2);
@@ -182,7 +179,7 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 10 && cont2 < 10) {
+                    if (cont1 < 20 && cont2 < 20) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file4);
                             file1.seek(position1);
@@ -197,13 +194,13 @@ public class Sort {
                             file1.seek(firstPosition1);
                             cont2++;
                         }
-                    } else if (cont1 < 10) {
+                    } else if (cont1 < 20) {
                         writeMovie(movie1, file4);
                         file1.seek(position1);
                         file1.skipBytes(sizeMovie1);
                         cont1++;
 
-                    } else if (cont2 < 10) {
+                    } else if (cont2 < 20) {
                         writeMovie(movie2, file4);
                         file2.seek(position2);
                         file2.skipBytes(sizeMovie2);
@@ -220,13 +217,13 @@ public class Sort {
         movie1 = new Movie();
         movie2 = new Movie();
 
+        // clear file1 and file2
+        file1.setLength(0);
+        file2.setLength(0);
+
         // seeks the pointer at the beggining of the two files
         file3.seek(0);
         file4.seek(0);
-
-        // clear file1 and file2
-        // file_1.delete();
-        // file_2.delete();
 
         cont1 = 0;
         cont2 = 0;
@@ -234,7 +231,7 @@ public class Sort {
         for (int u = 0; u < 4; u++) {
 
             if (u % 2 == 0) { // file control
-                for (int i = 0; i < 16 /* 200 */; i++) {
+                for (int i = 0; i < 16 /* 400 */; i++) {
 
                     String id1 = "";
                     String id2 = "";
@@ -267,7 +264,7 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 10 && cont2 < 10) {
+                    if (cont1 < 20 && cont2 < 20) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file1);
                             file3.seek(position1);
@@ -282,14 +279,14 @@ public class Sort {
                             file3.seek(firstPosition1);
                             cont2++;
                         }
-                    } else if (cont1 < 10) {
+                    } else if (cont1 < 20) {
                         writeMovie(movie1, file1);
                         file3.seek(position1);
                         file3.skipBytes(sizeMovie1);
                         file4.seek(firstPosition2);
                         cont1++;
 
-                    } else if (cont2 < 10) {
+                    } else if (cont2 < 20) {
                         writeMovie(movie2, file1);
                         file4.seek(position2);
                         file4.skipBytes(sizeMovie2);
@@ -299,7 +296,7 @@ public class Sort {
                     }
                 }
             } else {
-                for (int i = 0; i < 16 /* 200 */; i++) {
+                for (int i = 0; i < 16 /* 400 */; i++) {
 
                     String id1 = "";
                     String id2 = "";
@@ -332,9 +329,9 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 10 && cont2 < 10) {
+                    if (cont1 < 20 && cont2 < 20) {
                         if (id1.compareTo(id2) < 0) {
-                            writeMovie(movie1, file4);
+                            writeMovie(movie1, file2);
                             file3.seek(position1);
                             file3.skipBytes(sizeMovie1);
                             file4.seek(firstPosition2);
@@ -347,13 +344,13 @@ public class Sort {
                             file3.seek(firstPosition1);
                             cont2++;
                         }
-                    } else if (cont1 < 10) {
+                    } else if (cont1 < 20) {
                         writeMovie(movie1, file2);
                         file3.seek(position1);
                         file3.skipBytes(sizeMovie1);
                         cont1++;
 
-                    } else if (cont2 < 10) {
+                    } else if (cont2 < 20) {
                         writeMovie(movie2, file2);
                         file4.seek(position2);
                         file4.skipBytes(sizeMovie2);
@@ -367,6 +364,12 @@ public class Sort {
 
     }
 
+    // public void segmentosTamanhoVariavel() throws Exception {
+
+    // }
+    
+
+    
     public void writeMovie(Movie movie, RandomAccessFile file) throws IOException {
         byte[] ba = movie.toByteArray(); // creates a byte array from the movie information
         // add the new movie to the file

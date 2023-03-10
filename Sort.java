@@ -71,7 +71,7 @@ public class Sort {
 
         /*
          * - Lidar com eof
-         * - Fazer intercalação entre file3 e file4
+         * - Fazer intercalação entre file3 e file4 
          * - Um não pode entrar no outro
          */
 
@@ -79,9 +79,13 @@ public class Sort {
         Movie movie2 = new Movie();
         int cont1 = 0;
         int cont2 = 0;
+ 
+        for(int u=0; u<4; u++){
 
+            u%2==0
+        }
         // compare array[i] from file 1 to array[i] from file 2
-        for (int i = 0; i < 4 /* 100 */; i++) {
+        for (int i = 0; i < 8 /* 100 */; i++) {
 
             // reads register from file 1
             if (i == 0) {
@@ -89,7 +93,7 @@ public class Sort {
             }
             long firstPosition1 = file1.getFilePointer();
             int sizeMovie1 = file1.readInt(); // reads the register size
-            //long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+            long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
             boolean b1 = file1.readBoolean(); // checks if the register is valid
             file1.readInt(); // reads 4
             String id1 = file1.readUTF(); // reads the movie id
@@ -109,11 +113,9 @@ public class Sort {
             movie2 = readMovie(sizeMovie2, id2, b2, file2);
             cont2++; // controls the block
 
-            if (i < 8 /* writes on file3 -> 2 * array[i] */) {
-
-                if (id1.compareTo(id2) < 0 && cont1 < 4) {
+                if (id1.compareTo(id2) < 0 ) {
                     writeMovie(movie1, file3);
-                    //file1.seek(position1);
+                    file1.seek(position1);
                     file1.skipBytes(sizeMovie1);
                     file2.seek(firstPosition2);
                 } else {
@@ -122,19 +124,19 @@ public class Sort {
                     file2.skipBytes(sizeMovie2);
                     file1.seek(firstPosition1);
                 }
-            } else { /* writes on file4 -> 2 * array[i] */
-                if (id1.compareTo(id2) < 0 && cont2 < 4) {
-                    writeMovie(movie1, file4);
-                    //file1.seek(position1);
-                    file1.skipBytes(sizeMovie1);
-                    file2.seek(firstPosition2);
-                } else {
-                    writeMovie(movie2, file4);
-                    file2.seek(position2);
-                    file2.skipBytes(sizeMovie2);
-                    file1.seek(firstPosition1);
-                }
-            }
+             /* writes on file4 -> 2 * array[i] */
+                // if (id1.compareTo(id2) < 0) {
+                //     writeMovie(movie1, file4);
+                //     file1.seek(position1);
+                //     file1.skipBytes(sizeMovie1);
+                //     file2.seek(firstPosition2);
+                // } else {
+                //     writeMovie(movie2, file4);
+                //     file2.seek(position2);
+                //     file2.skipBytes(sizeMovie2);
+                //     file1.seek(firstPosition1);
+                // }
+            
         }
     }
 
@@ -231,6 +233,7 @@ public class Sort {
     public void clear() {
         file_1.delete();
         file_2.delete();
+        file_3.delete();
     }
 
     private Movie readMovie(int fileSize, String id, boolean lapide, RandomAccessFile file) throws Exception {

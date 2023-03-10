@@ -6,17 +6,17 @@ public class Sort {
     private RandomAccessFile fileReader;
     private long position;
 
-    File file_1 = new File("arquivo1.txt");
-    RandomAccessFile file1 = new RandomAccessFile("arquivo1.txt", "rw");
+    File file_1 = new File("arquivo1.db");
+    RandomAccessFile file1 = new RandomAccessFile("arquivo1.db", "rw");
 
-    File file_2 = new File("arquivo2.txt");
-    RandomAccessFile file2 = new RandomAccessFile("arquivo2.txt", "rw");
+    File file_2 = new File("arquivo2.db");
+    RandomAccessFile file2 = new RandomAccessFile("arquivo2.db", "rw");
 
-    File file_3 = new File("arquivo3.txt");
-    RandomAccessFile file3 = new RandomAccessFile("arquivo3.txt", "rw");
+    File file_3 = new File("arquivo3.db");
+    RandomAccessFile file3 = new RandomAccessFile("arquivo3.db", "rw");
 
-    File file_4 = new File("arquivo4.txt");
-    RandomAccessFile file4 = new RandomAccessFile("arquivo4.txt", "rw");
+    File file_4 = new File("arquivo4.db");
+    RandomAccessFile file4 = new RandomAccessFile("arquivo4.db", "rw");
 
     /* Intercalação balanceada comum */
 
@@ -54,13 +54,13 @@ public class Sort {
             if (fileControl % 2 == 0) {
                 // add arrays to first file
                 for (int i = 0; i < 10; i++) {
-                    // add array[currentElement] to "arquivo1.txt"
+                    // add array[currentElement] to "arquivo1.db"
                     writeMovie(array[i], file1);
                 }
             } else {
                 // add arrays to second file
                 for (int i = 0; i < 10; i++) {
-                    // add array[currentElement] to "arquivo2.txt"
+                    // add array[currentElement] to "arquivo2.db"
                     writeMovie(array[i], file2);
                 }
             }
@@ -89,11 +89,11 @@ public class Sort {
             }
             long firstPosition1 = file1.getFilePointer();
             int sizeMovie1 = file1.readInt(); // reads the register size
-            long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+            //long position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
             boolean b1 = file1.readBoolean(); // checks if the register is valid
             file1.readInt(); // reads 4
             String id1 = file1.readUTF(); // reads the movie id
-            movie1 = readMovie(sizeMovie1, id1, b1);
+            movie1 = readMovie(sizeMovie1, id1, b1, file1);
             cont1++; // controls the block
 
             // reads register from file 2
@@ -106,14 +106,14 @@ public class Sort {
             boolean b2 = file2.readBoolean(); // checks if the register is valid
             file2.readInt(); // reads 4
             String id2 = file2.readUTF(); // reads the movie id
-            movie2 = readMovie(sizeMovie2, id2, b2);
+            movie2 = readMovie(sizeMovie2, id2, b2, file2);
             cont2++; // controls the block
 
             if (i < 8 /* writes on file3 -> 2 * array[i] */) {
 
                 if (id1.compareTo(id2) < 0 && cont1 < 4) {
                     writeMovie(movie1, file3);
-                    file1.seek(position1);
+                    //file1.seek(position1);
                     file1.skipBytes(sizeMovie1);
                     file2.seek(firstPosition2);
                 } else {
@@ -125,7 +125,7 @@ public class Sort {
             } else { /* writes on file4 -> 2 * array[i] */
                 if (id1.compareTo(id2) < 0 && cont2 < 4) {
                     writeMovie(movie1, file4);
-                    file1.seek(position1);
+                    //file1.seek(position1);
                     file1.skipBytes(sizeMovie1);
                     file2.seek(firstPosition2);
                 } else {
@@ -233,7 +233,7 @@ public class Sort {
         file_2.delete();
     }
 
-    private Movie readMovie(int fileSize, String id, boolean lapide) throws Exception {
+    private Movie readMovie(int fileSize, String id, boolean lapide, RandomAccessFile file) throws Exception {
         Movie movie = new Movie(); // movie object that will be returned
 
         // set already read information---
@@ -245,24 +245,24 @@ public class Sort {
 
         // read and set the rest of the movie atributes ---
 
-        fileReader.readInt();
-        movie.set_title(fileReader.readUTF()); // set title
+        int x = file.readInt();
+        movie.set_title(file.readUTF()); // set title
 
-        int n = fileReader.readInt();// read the number of genres in the multivalued atribute
+        int n = file.readInt();// read the number of genres in the multivalued atribute
         String[] s = new String[n]; // create array
         for (int i = 0; i < n; i++) { // set array
-            fileReader.readInt();
-            s[i] = fileReader.readUTF();
+            file.readInt();
+            s[i] = file.readUTF();
         }
         movie.set_genres(s); // set genres
 
-        movie.set_duration(fileReader.readInt()); // set duratioin of the movie
+        movie.set_duration(file.readInt()); // set duratioin of the movie
 
-        fileReader.readInt();
-        movie.set_contentType(fileReader.readUTF()); // set the content type of the movie
+        file.readInt();
+        movie.set_contentType(file.readUTF()); // set the content type of the movie
 
-        fileReader.readInt();
-        movie.set_dateAdded(fileReader.readUTF()); // set the date of the movie
+        file.readInt();
+        movie.set_dateAdded(file.readUTF()); // set the date of the movie
 
         return movie;
     }

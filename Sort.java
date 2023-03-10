@@ -78,6 +78,9 @@ public class Sort {
         int cont1 = 0;
         int cont2 = 0;
 
+        long lastPosition1 = 0;
+        long lastPosition2 = 0;
+
         for (int u = 0; u < 4; u++) {
 
             if (u % 2 == 0) { // file control
@@ -212,9 +215,155 @@ public class Sort {
             }
         }
 
-        /*Segunda intercalação*/
+        /* Segunda intercalação */
 
-        
+        movie1 = new Movie();
+        movie2 = new Movie();
+
+        // seeks the pointer at the beggining of the two files
+        file3.seek(0);
+        file4.seek(0);
+
+        // clear file1 and file2
+        // file_1.delete();
+        // file_2.delete();
+
+        cont1 = 0;
+        cont2 = 0;
+
+        for (int u = 0; u < 4; u++) {
+
+            if (u % 2 == 0) { // file control
+                for (int i = 0; i < 16 /* 200 */; i++) {
+
+                    String id1 = "";
+                    String id2 = "";
+                    int sizeMovie1 = 0;
+                    int sizeMovie2 = 0;
+                    long position1 = 0;
+                    long position2 = 0;
+                    long firstPosition1 = 0;
+                    long firstPosition2 = 0;
+
+                    if (file3.getFilePointer() < file3.length()) {
+                        firstPosition1 = file3.getFilePointer();
+                        sizeMovie1 = file3.readInt(); // reads the register size
+                        position1 = file3.getFilePointer(); // gets pointer to the beginning of the register
+                        boolean b1 = file3.readBoolean(); // checks if the register is valid
+                        file3.readInt(); // reads 4
+                        id1 = file3.readUTF(); // reads the movie id
+                        movie1 = readMovie(sizeMovie1, id1, b1, file3);
+
+                    }
+
+                    if (file4.getFilePointer() < file4.length()) {
+                        firstPosition2 = file4.getFilePointer();
+                        sizeMovie2 = file4.readInt(); // reads the register size
+                        position2 = file4.getFilePointer(); // gets pointer to the beginning of the register
+                        boolean b2 = file4.readBoolean(); // checks if the register is valid
+                        file4.readInt(); // reads 4
+                        id2 = file4.readUTF(); // reads the movie id
+                        movie2 = readMovie(sizeMovie2, id2, b2, file4);
+
+                    }
+
+                    if (cont1 < 10 && cont2 < 10) {
+                        if (id1.compareTo(id2) < 0) {
+                            writeMovie(movie1, file1);
+                            file3.seek(position1);
+                            file3.skipBytes(sizeMovie1);
+                            file4.seek(firstPosition2);
+                            cont1++;
+
+                        } else {
+                            writeMovie(movie2, file1);
+                            file4.seek(position2);
+                            file4.skipBytes(sizeMovie2);
+                            file3.seek(firstPosition1);
+                            cont2++;
+                        }
+                    } else if (cont1 < 10) {
+                        writeMovie(movie1, file1);
+                        file3.seek(position1);
+                        file3.skipBytes(sizeMovie1);
+                        file4.seek(firstPosition2);
+                        cont1++;
+
+                    } else if (cont2 < 10) {
+                        writeMovie(movie2, file1);
+                        file4.seek(position2);
+                        file4.skipBytes(sizeMovie2);
+                        file3.seek(firstPosition1);
+                        cont2++;
+
+                    }
+                }
+            } else {
+                for (int i = 0; i < 16 /* 200 */; i++) {
+
+                    String id1 = "";
+                    String id2 = "";
+                    int sizeMovie1 = 0;
+                    int sizeMovie2 = 0;
+                    long position1 = 0;
+                    long position2 = 0;
+                    long firstPosition1 = 0;
+                    long firstPosition2 = 0;
+
+                    if (file3.getFilePointer() < file3.length()) {
+                        firstPosition1 = file3.getFilePointer();
+                        sizeMovie1 = file3.readInt(); // reads the register size
+                        position1 = file3.getFilePointer(); // gets pointer to the beginning of the register
+                        boolean b1 = file3.readBoolean(); // checks if the register is valid
+                        file3.readInt(); // reads 4
+                        id1 = file3.readUTF(); // reads the movie id
+                        movie1 = readMovie(sizeMovie1, id1, b1, file3);
+
+                    }
+
+                    if (file4.getFilePointer() < file4.length()) {
+                        firstPosition2 = file4.getFilePointer();
+                        sizeMovie2 = file4.readInt(); // reads the register size
+                        position2 = file4.getFilePointer(); // gets pointer to the beginning of the register
+                        boolean b2 = file4.readBoolean(); // checks if the register is valid
+                        file4.readInt(); // reads 4
+                        id2 = file4.readUTF(); // reads the movie id
+                        movie2 = readMovie(sizeMovie2, id2, b2, file4);
+
+                    }
+
+                    if (cont1 < 10 && cont2 < 10) {
+                        if (id1.compareTo(id2) < 0) {
+                            writeMovie(movie1, file4);
+                            file3.seek(position1);
+                            file3.skipBytes(sizeMovie1);
+                            file4.seek(firstPosition2);
+                            cont1++;
+
+                        } else {
+                            writeMovie(movie2, file2);
+                            file4.seek(position2);
+                            file4.skipBytes(sizeMovie2);
+                            file3.seek(firstPosition1);
+                            cont2++;
+                        }
+                    } else if (cont1 < 10) {
+                        writeMovie(movie1, file2);
+                        file3.seek(position1);
+                        file3.skipBytes(sizeMovie1);
+                        cont1++;
+
+                    } else if (cont2 < 10) {
+                        writeMovie(movie2, file2);
+                        file4.seek(position2);
+                        file4.skipBytes(sizeMovie2);
+                        cont2++;
+
+                    }
+                }
+
+            }
+        }
 
     }
 

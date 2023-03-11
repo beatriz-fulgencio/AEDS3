@@ -29,24 +29,30 @@ public class exTP {
     }
 
     public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
         Crud byteFileRandler = new Crud("movies.db");
 
-        read(byteFileRandler);
+        // read(byteFileRandler);
 
         //  byteFileRandler.clear();
-        // byteFileRandler.read("0000");
+        // // byteFileRandler.read("0000");
 
         // byteFileRandler.update("0002");
+        // System.out.print("Ler");
+        // String y = sc.nextLine();
 
-        // byteFileRandler.update("0000");
+        // // byteFileRandler.update("0000");
 
         Sort fileSort = new Sort("movies.db");
 
-        // fileSort.clear();
+        fileSort.clear();
 
-        fileSort.intercalacaoBalanceadaComum();
-        fileSort.read();
-// 
+//         fileSort.intercalacaoBalanceadaComum();
+        
+//          System.out.print("Ler");
+//         String x = sc.nextLine();
+//         fileSort.read();
+// // 
         // byteFileRandler.create();
         // byteFileRandler.delete("0099");
         // byteFileRandler.update("0002");

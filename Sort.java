@@ -33,7 +33,7 @@ public class Sort {
         fileReader.seek(0); // set the poiter at the beggining of the file
         int finalId = Integer.parseInt(fileReader.readUTF());// skip last id
 
-        total = finalId+1;
+        total = finalId;
         Movie[] array = new Movie[total/2];
 
         int arq = 0; // contabiliza os elementos do array

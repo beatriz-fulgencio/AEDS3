@@ -202,7 +202,10 @@ public class Crud {
                 fileReader.write(ba);
              }else{ // else delete the current file and save the modified one as new
                 fileReader.writeBoolean(false);
-                writeMovie(movie);
+                // add the new movie to the file
+                fileReader.seek(fileReader.length()); // goes to the end of the file
+                fileReader.writeInt(ba.length); // writes the size of the object
+                fileReader.write(ba); // writes the object byte array
              }
              System.out.println();
 

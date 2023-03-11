@@ -18,6 +18,8 @@ public class Sort {
     File file_4 = new File("arquivo4.db");
     RandomAccessFile file4 = new RandomAccessFile("arquivo4.db", "rw");
 
+    int total =100;
+
     /* Intercalação balanceada comum */
 
     Sort(String file) throws FileNotFoundException {
@@ -29,15 +31,16 @@ public class Sort {
 
         int fileControl = 0;
         fileReader.seek(0); // set the poiter at the beggining of the file
-        fileReader.readUTF();// skip last id
+        int finalId = Integer.parseInt(fileReader.readUTF());// skip last id
 
-        Movie[] array = new Movie[20];
+        total = finalId+1;
+        Movie[] array = new Movie[total/2];
 
         int arq = 0; // contabiliza os elementos do array
 
-        while (/* fileReader.getFilePointer() < fileReader.length() */arq < 40) {
+        while (/* fileReader.getFilePointer() < fileReader.length() */arq < total) {
             int currentElement = 0; // contabiliza os elementos do array
-            while (currentElement < 20) {
+            while (currentElement < total/2) {
                 array[currentElement] = new Movie();
                 int sizeMovie = fileReader.readInt();
                 position = fileReader.getFilePointer();
@@ -53,13 +56,13 @@ public class Sort {
             // 2 ways:
             if (fileControl % 2 == 0) {
                 // add arrays to first file
-                for (int i = 0; i < 20; i++) {
+                for (int i = 0; i < total/2; i++) {
                     // add array[currentElement] to "arquivo1.db"
                     writeMovie(array[i], file1);
                 }
             } else {
                 // add arrays to second file
-                for (int i = 0; i < 20; i++) {
+                for (int i = 0; i < total/2; i++) {
                     // add array[currentElement] to "arquivo2.db"
                     writeMovie(array[i], file2);
                 }
@@ -77,11 +80,11 @@ public class Sort {
 
         int cont1 = 0;
         int cont2 = 0;
-        int contGeral = 0;
+        // int contGeral = 0;
 
-        int x = 40/4;
+        int x = total/4;
 
-        for (int u = 0; u <= (40/8) ; u++) {
+        for (int u = 0; u <= (total/8) ; u++) {
 
             if (u % 2 == 0) { // file control
                 for (int i = 0; i < x /* 200 */ ; i++) {
@@ -117,14 +120,14 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 20 && cont2 < 20) {
+                    if (cont1 < total/2 && cont2 < total/2) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file3);
                             file1.seek(position1);
                             file1.skipBytes(sizeMovie1);
                             file2.seek(firstPosition2);
                             cont1++;
-                            contGeral++;
+                            // contGeral++;
 
                         } else {
                             writeMovie(movie2, file3);
@@ -132,23 +135,23 @@ public class Sort {
                             file2.skipBytes(sizeMovie2);
                             file1.seek(firstPosition1);
                             cont2++;
-                            contGeral++;
+                            // contGeral++;
                         }
-                    } else if (cont1 < 20) {
+                    } else if (cont1 < total/2) {
                         writeMovie(movie1, file3);
                         file1.seek(position1);
                         file1.skipBytes(sizeMovie1);
                         file2.seek(firstPosition2);
                         cont1++;
-                        contGeral++;
+                        // contGeral++;
 
-                    } else if (cont2 < 20) {
+                    } else if (cont2 < total/2) {
                         writeMovie(movie2, file3);
                         file2.seek(position2);
                         file2.skipBytes(sizeMovie2);
                         file1.seek(firstPosition1);
                         cont2++;
-                        contGeral++;
+                        // contGeral++;
 
                     }
                 }
@@ -186,14 +189,14 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 20 && cont2 < 20) {
+                    if (cont1 < total/2 && cont2 < total/2) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file4);
                             file1.seek(position1);
                             file1.skipBytes(sizeMovie1);
                             file2.seek(firstPosition2);
                             cont1++;
-                            contGeral++;
+                            // contGeral++;
 
                         } else {
                             writeMovie(movie2, file4);
@@ -201,28 +204,28 @@ public class Sort {
                             file2.skipBytes(sizeMovie2);
                             file1.seek(firstPosition1);
                             cont2++;
-                            contGeral++;
+                            // contGeral++;
                         }
-                    } else if (cont1 < 20) {
+                    } else if (cont1 < total/2) {
                         writeMovie(movie1, file4);
                         file1.seek(position1);
                         file1.skipBytes(sizeMovie1);
                         cont1++;
-                        contGeral++;
+                        // contGeral++;
 
-                    } else if (cont2 < 20) {
+                    } else if (cont2 < total/2) {
                         writeMovie(movie2, file4);
                         file2.seek(position2);
                         file2.skipBytes(sizeMovie2);
                         cont2++;
-                        contGeral++;
+                        // contGeral++;
 
                     }
                 }
 
             }
         }
-        System.out.print(contGeral);
+        //System.out.print(contGeral);
 
         /* Segunda intercalação */
 
@@ -240,14 +243,14 @@ public class Sort {
         cont1 = 0;
         cont2 = 0;
 
-         x = 40/2;
+         x = total/2;
 
-       //int maxRead = 20 %16;
+       //int maxRead = total/2 ;
 
-        for (int u = 0; u <= (40/16); u++) {
+        for (int u = 0; u <= (total/16); u++) {
             System.out.println(u);
             if (u % 2 == 0) { // file control
-                for (int i = 0; i < x /* 400 */; i++) {
+                for (int i = 0; i < x /* total0 */; i++) {
 
                     String id1 = "";
                     String id2 = "";
@@ -280,7 +283,7 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 20 && cont2 < 20) {
+                    if (cont1 < total/2 && cont2 < total/2) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file1);
                             file3.seek(position1);
@@ -295,14 +298,14 @@ public class Sort {
                             file3.seek(firstPosition1);
                             cont2++;
                         }
-                    } else if (cont1 < 20) {
+                    } else if (cont1 < total/2) {
                         writeMovie(movie1, file1);
                         file3.seek(position1);
                         file3.skipBytes(sizeMovie1);
                         file4.seek(firstPosition2);
                         cont1++;
 
-                    } else if (cont2 < 20) {
+                    } else if (cont2 < total/2) {
                         writeMovie(movie2, file1);
                         file4.seek(position2);
                         file4.skipBytes(sizeMovie2);
@@ -312,7 +315,7 @@ public class Sort {
                     }
                 }
             } else {
-                for (int i = 0; i < x /* 400 */; i++) {
+                for (int i = 0; i < x /* total0 */; i++) {
 
                     String id1 = "";
                     String id2 = "";
@@ -345,7 +348,7 @@ public class Sort {
 
                     }
 
-                    if (cont1 < 20 && cont2 < 20) {
+                    if (cont1 < total/2 && cont2 < total/2) {
                         if (id1.compareTo(id2) < 0) {
                             writeMovie(movie1, file2);
                             file3.seek(position1);
@@ -360,13 +363,13 @@ public class Sort {
                             file3.seek(firstPosition1);
                             cont2++;
                         }
-                    } else if (cont1 < 20) {
+                    } else if (cont1 < total/2) {
                         writeMovie(movie1, file2);
                         file3.seek(position1);
                         file3.skipBytes(sizeMovie1);
                         cont1++;
 
-                    } else if (cont2 < 20) {
+                    } else if (cont2 < total/2) {
                         writeMovie(movie2, file2);
                         file4.seek(position2);
                         file4.skipBytes(sizeMovie2);
@@ -392,8 +395,76 @@ public class Sort {
         cont1 = 0;
         cont2 = 0;
 
-         x = 40/2;
-         
+         x = total;
+
+         for (int i = 0; i < x /* 200 */ ; i++) {
+
+            String id1 = "";
+            String id2 = "";
+            int sizeMovie1 = 0;
+            int sizeMovie2 = 0;
+            long position1 = 0;
+            long position2 = 0;
+            long firstPosition1 = 0;
+            long firstPosition2 = 0;
+
+            if (file1.getFilePointer() < file1.length()) {
+                firstPosition1 = file1.getFilePointer();
+                sizeMovie1 = file1.readInt(); // reads the register size
+                position1 = file1.getFilePointer(); // gets pointer to the beginning of the register
+                boolean b1 = file1.readBoolean(); // checks if the register is valid
+                file1.readInt(); // reads 4
+                id1 = file1.readUTF(); // reads the movie id
+                movie1 = readMovie(sizeMovie1, id1, b1, file1);
+
+            }
+
+            if (file2.getFilePointer() < file2.length()) {
+                firstPosition2 = file2.getFilePointer();
+                sizeMovie2 = file2.readInt(); // reads the register size
+                position2 = file2.getFilePointer(); // gets pointer to the beginning of the register
+                boolean b2 = file2.readBoolean(); // checks if the register is valid
+                file2.readInt(); // reads 4
+                id2 = file2.readUTF(); // reads the movie id
+                movie2 = readMovie(sizeMovie2, id2, b2, file2);
+
+            }
+
+            if (cont1 < total/2 && cont2 < total/2) {
+                if (id1.compareTo(id2) < 0) {
+                    writeMovie(movie1, file3);
+                    file1.seek(position1);
+                    file1.skipBytes(sizeMovie1);
+                    file2.seek(firstPosition2);
+                    cont1++;
+                    // contGeral++;
+
+                } else {
+                    writeMovie(movie2, file3);
+                    file2.seek(position2);
+                    file2.skipBytes(sizeMovie2);
+                    file1.seek(firstPosition1);
+                    cont2++;
+                    // contGeral++;
+                }
+            } else if (cont1 < total/2) {
+                writeMovie(movie1, file3);
+                file1.seek(position1);
+                file1.skipBytes(sizeMovie1);
+                file2.seek(firstPosition2);
+                cont1++;
+                // contGeral++;
+
+            } else if (cont2 < total/2) {
+                writeMovie(movie2, file3);
+                file2.seek(position2);
+                file2.skipBytes(sizeMovie2);
+                file1.seek(firstPosition1);
+                cont2++;
+                // contGeral++;
+
+            }
+        }
 
     }
 
@@ -532,6 +603,32 @@ public class Sort {
         movie.set_dateAdded(file.readUTF()); // set the date of the movie
 
         return movie;
+    }
+
+
+    public void read() throws IOException {
+        FileWriter fileWrite = new FileWriter("Id.txt");
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+        file3.seek(0);
+        try {
+            while (file3.getFilePointer() < file3.length()) { // while the file is not done
+                sizeMovie = file3.readInt(); // read the size of the object being read
+                lapide = file3.readBoolean(); // see if movie is valid
+                if (lapide) {
+                    file3.readInt();
+                    movieId = file3.readUTF();
+                    fileWrite.write(movieId + "  ");
+                    file3.skipBytes(sizeMovie - 11);
+                } else {
+                    file3.skipBytes(sizeMovie - 1); // if is not valid go to next one
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fileWrite.close();
     }
 
 }

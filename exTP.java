@@ -30,7 +30,7 @@ public class exTP {
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-        Crud byteFileRandler = new Crud("movies.db");
+        // Crud byteFileRandler = new Crud("movies.db");
 
         // read(byteFileRandler);
 
@@ -45,9 +45,9 @@ public class exTP {
 
         Sort fileSort = new Sort("movies.db");
 
-        fileSort.clear();
+        // fileSort.clear();
 
-//         fileSort.intercalacaoBalanceadaComum();
+        fileSort.intercalacaoBalanceadaComum();
         
 //          System.out.print("Ler");
 //         String x = sc.nextLine();

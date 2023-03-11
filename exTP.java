@@ -4,7 +4,7 @@ import java.util.*;
 
 public class exTP {
 
-    public static int qntde;
+    public static int qntde = 3860;
 
     public static void read(Crud bfr) throws FileNotFoundException {
         File file = new File("netflix.csv");
@@ -14,7 +14,7 @@ public class exTP {
         try {
             sc = new Scanner(file);
             while (/* sc.hasNextLine() */ i < 40) {
-                Movie movie = new Movie(qntde++);
+                Movie movie = new Movie(qntde--);
                 movie.read(sc.nextLine());
                 bfr.writeMovie(movie);
                 i++;

@@ -26,7 +26,8 @@ public class Sort {
     }
 
     public void intercalacaoBalanceadaComum() throws Exception {
-
+    
+        //Distribuição
         int fileControl = 0;
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id

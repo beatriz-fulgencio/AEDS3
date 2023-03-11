@@ -45,7 +45,7 @@ public class exTP {
         // fileSort.clear();
 
         fileSort.intercalacaoBalanceadaComum();
-
+// 
         // byteFileRandler.create();
         // byteFileRandler.delete("0099");
         // byteFileRandler.update("0002");

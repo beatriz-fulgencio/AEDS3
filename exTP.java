@@ -29,9 +29,9 @@ public class exTP {
     }
 
     public static void main(String[] args) throws Exception {
-        Crud byteFileRandler = new Crud("movies.db");
+        // Crud byteFileRandler = new Crud("movies.db");
 
-        read(byteFileRandler);
+        // read(byteFileRandler);
 
         //  byteFileRandler.clear();
         // byteFileRandler.read("0000");
@@ -40,11 +40,11 @@ public class exTP {
 
         // byteFileRandler.update("0000");
 
-        Sort fileSort = new Sort("movies.db");
+        // Sort fileSort = new Sort("movies.db");
 
         // fileSort.clear();
 
-        fileSort.intercalacaoBalanceadaComum();
+        // fileSort.intercalacaoBalanceadaComum();
 
         // byteFileRandler.create();
         // byteFileRandler.delete("0099");

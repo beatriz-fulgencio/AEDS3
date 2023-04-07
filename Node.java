@@ -5,6 +5,7 @@ public class Node {
     private Key[] parent;
     private int maxElements;
     private int maxChildren;
+    private Key root;
 
     public Node() {
         this.maxChildren = 8;
@@ -12,6 +13,7 @@ public class Node {
         this.parent = new Key[maxElements];
         this.children = new Node[maxChildren];
         this.control = 0;
+        this.root = null;
     }
 
     public Node(int maxChildren) {
@@ -20,14 +22,37 @@ public class Node {
         this.parent = new Key[maxElements];
         this.children = new Node[maxChildren];
         this.control = 0;
+        this.root = null;
     }
 
-    public Node(int control, Node[] children, Key[] parent, int maxElements, int maxChildren) {
+    public Node(int control, Node[] children, Key[] parent, int maxElements, int maxChildren, Key root) {
         this.maxChildren = maxChildren;
         this.maxElements = maxElements;
         this.parent = parent;
         this.children = children;
         this.control = control;
+        this.root = root;
+    }
+
+    // searches the element
+    public Key search(Key key, int id) {
+        int i = 1;
+        while ((i <= maxElements) && (id > key.get_id())) {
+            i++;
+        }
+        if ((i <= maxElements) && (id == key.get_id())) {
+            return key;
+        }
+        if (isLeaf()) {
+            return null;
+        } else {
+            // return (search(key.getFilho().get(i - 1), id));
+        }
+    }
+
+    // initializes an empty b tree
+    public void bTree() {
+        root = new Key();
     }
 
     // checks if the node is a leaf
@@ -45,8 +70,7 @@ public class Node {
         boolean isRoot;
         if (this.parent == null) {
             isRoot = true;
-        }
-        else {
+        } else {
             isRoot = false;
         }
         return isRoot;
@@ -64,23 +88,24 @@ public class Node {
 
     // detecting the type of insertion
     public void insertion(Key key) {
-        if (isLeaf()) {
-            if (! isFull()) { // if it is possible to insert in that node
-                addToNode(key);
-            }
-            else { // if the node has to be splitted
-                Key[] levelUp = new Key[8];
-                Key[] splitted1 = new Key[8];
-                Key[] splitted2 = new Key[8];
+        if (search(root, key.get_id()) == null) { // only adds new ids, not repeated ones
+            if (isLeaf()) {
+                if (!isFull()) { // if it is possible to insert in that node
+                    addToNode(key);
+                } else { // if the node has to be splitted
+                    Key[] levelUp = new Key[8];
+                    Key[] splitted1 = new Key[8];
+                    Key[] splitted2 = new Key[8];
 
-                levelUp[0] = parent[4];
+                    levelUp[0] = parent[4];
 
-                for(int i=0; i<4; i++) {
-                    splitted1[i] = parent[i];
-                }
+                    for (int i = 0; i < 4; i++) {
+                        splitted1[i] = parent[i];
+                    }
 
-                for(int i=5; i<8; i++) {
-                    splitted2[i-5] = parent[i];
+                    for (int i = 5; i < 8; i++) {
+                        splitted2[i - 5] = parent[i];
+                    }
                 }
             }
         }
@@ -103,13 +128,16 @@ public class Node {
     }
 
     public void removal(Key key) {
-        // if the element is on a leaf
-        if (isLeaf()) {
-            removeFromNode(key);
-        }
-        if (isRoot()) {
-            // gets the smallest element from the right tree
-            
+        if (search(this.root, key.get_id()) == null) { // verifies if the element exists
+
+            // if the element is on a leaf
+            if (isLeaf()) {
+                removeFromNode(key);
+            }
+            if (isRoot()) {
+                // gets the smallest element from the right tree
+
+            }
         }
     }
 

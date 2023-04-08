@@ -33,11 +33,11 @@ public class Bucket {
         return bucket;
     }
 
-    // public void Resetbucket(ArrayList<Key> newKeys) throws IOException{
-    //     bucket.clear();
-    //     bucket = newKeys;
-    //     WriteFile();
-    // }
+    public void Resetbucket(ArrayList<Key> newKeys) throws IOException{
+        bucket.clear();
+        bucket = newKeys;
+        WriteFile();
+    }
 
     public void WriteFile() throws IOException{
         fileReader = new RandomAccessFile("Hash.db", "rw");
@@ -79,5 +79,24 @@ public class Bucket {
 
     public long getAddress(){
         return address;
+    }
+
+    public boolean search(int id){
+        
+        try {
+            readFile(address);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        for (Key key : bucket) {
+            int keyId = key.getId();
+            if(keyId==id){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

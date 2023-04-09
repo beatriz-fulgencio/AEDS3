@@ -126,7 +126,7 @@ public class BTree {
         } else {
             int i = 0;
             for (i = node.currentElements - 1; i >= 0 && key.id < node.key[i].id; i--) {
-                // acha a posicao do novo elemento que sera inserido
+                // acha a posicao do novo element que sera inserido
             }
             i++; 
             Node temp = node.children[i]; 
@@ -250,9 +250,10 @@ public class BTree {
 
     private int searchFile(int pos, int id) throws IOException {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw");
-        int pontAnt = 0, pontPos;
-        int elemento;
-        int endereco = -1;
+        int pointer1 = 0;
+        int pointer2;
+        int element;
+        int address = -1;
 
         if (pos == 0) {
             file.seek(pos);
@@ -262,31 +263,31 @@ public class BTree {
         file.seek(pos);
         int counter = file.readInt();
         for (int i = 0; i < counter; i++) {
-            pontAnt = file.readInt();
-            elemento = file.readInt();
-            endereco = file.readInt();
-            if (elemento == id) {
+            pointer1 = file.readInt();
+            element = file.readInt();
+            address = file.readInt();
+            if (element == id) {
                 found = true;
-                return endereco;
-            } else if (id < elemento && pontAnt != -1) {
-                endereco = searchFile(pontAnt, id);
+                return address;
+            } else if (id < element && pointer1 != -1) {
+                address = searchFile(pointer1, id);
             } else {
-                endereco = 0;
+                address = 0;
             }
             if (found) {
                 break;
             }
         }
 
-        if (endereco == 0 && pontAnt != -1) {
-            pontPos = file.readInt();
-            endereco = searchFile(pontPos, id);
+        if (address == 0 && pointer1 != -1) {
+            pointer2 = file.readInt();
+            address = searchFile(pointer2, id);
         }
         if (found == false) {
-            endereco = -1;
+            address = -1;
         }
         file.close();
-        return endereco;
+        return address;
     }
 
     public void updateAddress(int id, int address) throws IOException {
@@ -298,8 +299,8 @@ public class BTree {
             int counter = file.readInt();
             for (int i = 0; i < counter; i++) {
                 pointer = file.readInt();
-                int elemento = file.readInt();
-                if (elemento == id) {
+                int element = file.readInt();
+                if (element == id) {
                     file.writeInt(address);
                     break;
                 } else {

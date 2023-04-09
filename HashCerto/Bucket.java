@@ -1,11 +1,9 @@
-package Hashing;
-
 import java.io.*;
 import java.util.ArrayList;
 
 public class Bucket {
 
-    //private File file;
+    private File file;
     private RandomAccessFile fileReader;
     
     int p;
@@ -13,11 +11,13 @@ public class Bucket {
     long address;
     ArrayList<Key> bucket;
 
-    public Bucket(int p, long address){
+    public Bucket(int p, long address, File F) throws FileNotFoundException{
         this.p = p;
         maxLenght= 194;
         this.address = address;
         bucket = new ArrayList<Key>();
+        this.file = F;
+        fileReader = new RandomAccessFile(file, "rw");
     }
 
     public boolean AddKey(Key key) throws IOException{
@@ -40,7 +40,7 @@ public class Bucket {
     }
 
     public void WriteFile() throws IOException{
-        fileReader = new RandomAccessFile("Hash.db", "rw");
+        
 
         fileReader.seek(address);
         fileReader.writeInt(p);
@@ -98,5 +98,12 @@ public class Bucket {
         }
 
         return false;
+    }
+
+    public int getP(){
+        return p;
+    }
+    public void setP(int p){
+        this.p = p;
     }
 }

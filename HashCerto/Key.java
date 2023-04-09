@@ -1,5 +1,3 @@
-package Hashing;
-
 public class Key {
     private int id;
     private long address;

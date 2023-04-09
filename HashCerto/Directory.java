@@ -1,5 +1,3 @@
-package Hashing;
-
 import java.io.*;
 import java.util.ArrayList;
 
@@ -17,7 +15,7 @@ public class Directory {
         fileReader = new RandomAccessFile(file, "rw"); // opens the file in read and write mode
         p = 1;
         position = 0;
-        Bucket b = new Bucket(p, position);
+        Bucket b = new Bucket(p, position, file);
         dir.add(b.getAddress());
     }
 
@@ -43,7 +41,7 @@ public class Directory {
         try {
             b = readBucket(dir.get(pos));
         } catch (Exception e) {
-            b = new Bucket(p, fileReader.length());
+            b = new Bucket(p, fileReader.length(), file);
             dir.add(pos, b.getAddress());// add addres to hash table
         }
 
@@ -80,8 +78,10 @@ public class Directory {
         }
 
         b.Resetbucket(k1);
+        b.setP((b.getP()+1));
+        
         if (k2.size() > 0) {
-            b2 = new Bucket(p, fileReader.length());
+            b2 = new Bucket(b.getP(), fileReader.length(), file);
             b2.Resetbucket(k2);
             dir.add(b2.getAddress());
         }
@@ -89,13 +89,13 @@ public class Directory {
     }
 
     public Bucket readBucket(long address) throws IOException {
-        Bucket b = new Bucket(p, address);
+        Bucket b = new Bucket(p, address, file);
         b.readFile(address);
 
         return b;
     }
 
-    public boolean search(int id) {
+    public boolean search(int id) throws FileNotFoundException {
         int pos = HashFunc(id);
         long add = -1;
         try {
@@ -104,11 +104,15 @@ public class Directory {
             System.out.print(e.toString());
         }
         if (add != -1) {
-            Bucket b = new Bucket(p, add);
+            Bucket b = new Bucket(p, add, file);
             return b.search(id);
         }
 
         return false;
+    }
+
+    public void clear(){
+        file.delete();
     }
 
 }

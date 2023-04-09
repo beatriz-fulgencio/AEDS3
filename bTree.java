@@ -128,8 +128,8 @@ public class BTree {
             for (i = node.currentElements - 1; i >= 0 && key.id < node.key[i].id; i--) {
                 // acha a posicao do novo elemento que sera inserido
             }
-            i++; // posição o ponteiro que levara para o proximo no filho
-            Node temp = node.children[i]; // no filho
+            i++; 
+            Node temp = node.children[i]; 
             if (temp.currentElements == 2 * elements - 1) { // if the node is full
                 split(node, i, temp);
                 if (key.id > node.key[i].id) {
@@ -140,20 +140,19 @@ public class BTree {
         }
     }
 
+    // prints the ids
     public void show() throws IOException {
         show(root);
     }
 
-    private void show(Node node) {
-        // Le na ordem das paginas, de cima pra baixo - da esquerda para direita
-        assert (node == null);
-        for (int i = 0; i < node.currentElements; i++) { // percorre todos os elementos da pagina
+    private void show(Node node) { // starting by the root
+        for (int i = 0; i < node.currentElements; i++) {  // goes through all the elements
             System.out.print(node.key[i].id + " ");
         }
         System.out.print("\n");
-        if (!node.isLeaf) { // se a pagina não for folha, continua o processo de percorrer a árvore
+        if (!node.isLeaf) { // if the node is not a leaf yet
             for (int i = 0; i < node.currentElements + 1; i++) {
-                show(node.children[i]); // rescurividade ate chegar nas folhas
+                show(node.children[i]); // continues printing
             }
         }
     }
@@ -164,7 +163,7 @@ public class BTree {
     }
 
     public void writeIndex(Node node) throws IOException { 
-        RandomAccessFile file = new RandomAccessFile("file", "rw"); // what file?
+        RandomAccessFile file = new RandomAccessFile("file.db", "rw"); // what file?
         int pointer = 0;
 
         if (pointer == 0) {
@@ -190,7 +189,7 @@ public class BTree {
     }
 
     public int writeIndex(Node node, int pointer) throws IOException {
-        RandomAccessFile file = new RandomAccessFile("file", "rw"); // what file?
+        RandomAccessFile file = new RandomAccessFile("file.db", "rw"); // what file?
         
         int pointerLeaf = -1;
         int cont = 0;
@@ -210,7 +209,7 @@ public class BTree {
                 pointer = writeIndex(node.children[cont++], pointer);
             } 
             else { // is the node is a leaf
-                file.seek(pointer); // -1
+                file.seek(pointer); 
                 file.writeInt(node.currentElements); 
                 for (int i=0; i<node.currentElements; i++) {
                     file.writeInt(pointer);
@@ -227,7 +226,7 @@ public class BTree {
 
     // read file
     public void readFile() throws IOException {
-        RandomAccessFile file = new RandomAccessFile("file", "rw");
+        RandomAccessFile file = new RandomAccessFile("file.db", "rw");
         int pos = 4;
         while(pos <= file.length()) {
             file.seek(pos);
@@ -250,7 +249,7 @@ public class BTree {
     }
 
     private int searchFile(int pos, int id) throws IOException {
-        RandomAccessFile file = new RandomAccessFile("file", "rw");
+        RandomAccessFile file = new RandomAccessFile("file.db", "rw");
         int pontAnt = 0, pontPos;
         int elemento;
         int endereco = -1;
@@ -267,7 +266,6 @@ public class BTree {
             elemento = file.readInt();
             endereco = file.readInt();
             if (elemento == id) {
-                // System.out.println("ENDEREÇO ==== "+endereco);
                 found = true;
                 return endereco;
             } else if (id < elemento && pontAnt != -1) {
@@ -292,7 +290,7 @@ public class BTree {
     }
 
     public void updateAddress(int id, int address) throws IOException {
-        RandomAccessFile file = new RandomAccessFile("file", "rw");
+        RandomAccessFile file = new RandomAccessFile("file.db", "rw");
         int pos = 4;
         int pointer;
         do {

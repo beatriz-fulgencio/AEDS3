@@ -34,15 +34,15 @@ public class exTP {
         Crud byteFileRandler = new Crud("movies.db");
 
         Directory hash = new Directory("Hash.db");
-        
+
         read(byteFileRandler);
 // 
         byteFileRandler.read(hash);
 
 
-        byteFileRandler.getAddress(hash.search(3654));
+//         byteFileRandler.getAddress(hash.search(3654));
 
-       
+       hash.readFile();
 
         // byteFileRandler.clear();
         // hash.clear();

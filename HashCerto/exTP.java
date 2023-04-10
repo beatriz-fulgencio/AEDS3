@@ -4,7 +4,7 @@ import java.util.*;
 
 public class exTP {
 
-    public static int qntde = 3860;
+    public static int qntde = /*3860*/ 0;
 
     public static void read(Crud bfr) throws FileNotFoundException {
         File file = new File("netflix.csv");
@@ -13,8 +13,8 @@ public class exTP {
         int i = 0;
         try {
             sc = new Scanner(file);
-            while (/* sc.hasNextLine() */ i < 40) {
-                Movie movie = new Movie(qntde--);
+            while ( sc.hasNextLine()) {
+                Movie movie = new Movie(qntde++);
                 movie.read(sc.nextLine());
                 bfr.writeMovie(movie);
                 i++;
@@ -28,34 +28,24 @@ public class exTP {
 
     }
 
+   
     public static void main(String[] args) throws Exception {
+
         Crud byteFileRandler = new Crud("movies.db");
 
-        // Directory hash = new Directory("Hash.db");
-
+        Directory hash = new Directory("Hash.db");
+        
         read(byteFileRandler);
+// 
+        byteFileRandler.read(hash);
 
-        // byteFileRandler.read(hash);
+
+        byteFileRandler.getAddress(hash.search(3654));
+
+       
 
         // byteFileRandler.clear();
         // hash.clear();
-        // byteFileRandler.read("0000");
-
-        // byteFileRandler.update("0002");
-
-        // byteFileRandler.update("0000");
-
-        // Sort fileSort = new Sort("movies.db");
-
-        // fileSort.clear();
-
-        // fileSort.intercalacaoBalanceadaComum();
-
-        // byteFileRandler.create();
-        // byteFileRandler.delete("0099");
-        // byteFileRandler.update("0002");
-        // System.out.println(byteFileRandler.select("0002"));
-        // System.out.println(byteFileRandler.select("0003"));
     }
 
 }

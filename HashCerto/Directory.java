@@ -15,8 +15,8 @@ public class Directory {
         fileReader = new RandomAccessFile(file, "rw"); // opens the file in read and write mode
         p = 1;
         position = 0;
-        Bucket b = new Bucket(p, position, file);
-        dir.add(b.getAddress());
+        // Bucket b = new Bucket(p, position, file);
+        // dir.add(b.getAddress());
     }
 
     public int HashFunc(Key item) {
@@ -29,7 +29,7 @@ public class Directory {
     }
 
     public int bitExtracted(int number, int p) {
-        return (((1 << p) - 1) & (number >> 1));
+        return (((1 << p) - 1) & (number >> 0));
     }
 
     public void AddItem(int id, long address) throws IOException {
@@ -77,9 +77,9 @@ public class Directory {
             k2.add(item);
         }
 
+        b.setP((b.getP() + 1));
         b.Resetbucket(k1);
-        b.setP((b.getP()+1));
-        
+
         if (k2.size() > 0) {
             b2 = new Bucket(b.getP(), fileReader.length(), file);
             b2.Resetbucket(k2);
@@ -95,24 +95,46 @@ public class Directory {
         return b;
     }
 
-    public boolean search(int id) throws FileNotFoundException {
-        int pos = HashFunc(id);
+    public long search(int id) throws FileNotFoundException {
+        int bucket = HashFunc(id);
+        int pos = bitExtracted(bucket, p); // witch bucket
         long add = -1;
+        Bucket b;
         try {
-            add = dir.get(pos);
-        } catch (IndexOutOfBoundsException e) {
+            b = readBucket(dir.get(pos));
+            add = b.getAddress();
+            if (add != -1) {
+                return b.search(id);
+            }
+        } catch (Exception e) {
             System.out.print(e.toString());
         }
-        if (add != -1) {
-            Bucket b = new Bucket(p, add, file);
-            return b.search(id);
-        }
-
-        return false;
+        return -1;
     }
 
-    public void clear(){
+    public void clear() {
         file.delete();
+    }
+
+    public void readFile() throws IOException {
+        //RandomAccessFile fileReader = new RandomAccessFile("Hash.db", "rw");
+        fileReader.seek(0);
+        //Bucket b = new Bucket(p, p, null);
+        for (int i = 0; i < 4; i++) {
+            System.out.println("p" + fileReader.readInt());
+
+            fileReader.readInt();
+            int count = 0;
+
+            long position = fileReader.getFilePointer();
+            while (count < 2) {
+                fileReader.seek(position);
+                System.out.println("id = " + fileReader.readInt());
+                System.out.println("address = " + fileReader.readLong());
+                position = fileReader.getFilePointer();
+                count++;
+            }
+        }
     }
 
 }

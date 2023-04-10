@@ -13,7 +13,7 @@ public class Bucket {
 
     public Bucket(int p, long address, File F) throws FileNotFoundException{
         this.p = p;
-        maxLenght= 194;
+        maxLenght = 193;
         this.address = address;
         bucket = new ArrayList<Key>();
         this.file = F;
@@ -22,10 +22,10 @@ public class Bucket {
 
     public boolean AddKey(Key key) throws IOException{
         boolean ret = false;
-        if(bucket.size()<=maxLenght){
+        if(bucket.size()<maxLenght){
             ret = bucket.add(key);
         }
-        WriteFile();
+       // WriteFile();
         return ret;
     }
 
@@ -65,14 +65,18 @@ public class Bucket {
         fileReader.seek(pos);
        p = fileReader.readInt();
 
+       fileReader.readInt();
+       int count = 0;
+
        long position = fileReader.getFilePointer();
-       while(fileReader.readInt()!=-1){
+       while(fileReader.readInt()!=-1 && count<maxLenght){
         fileReader.seek(position);
         int id = fileReader.readInt();
         long add = fileReader.readLong();
         Key key = new Key(id, add);
         bucket.add(key);
         position = fileReader.getFilePointer();
+        count++;
        }
     
     }
@@ -81,7 +85,7 @@ public class Bucket {
         return address;
     }
 
-    public boolean search(int id){
+    public long search(int id){
         
         try {
             readFile(address);
@@ -93,11 +97,11 @@ public class Bucket {
         for (Key key : bucket) {
             int keyId = key.getId();
             if(keyId==id){
-                return true;
+                return key.getAddress();
             }
         }
 
-        return false;
+        return -1;
     }
 
     public int getP(){

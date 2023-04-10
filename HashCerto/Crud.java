@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
 
-import javax.print.PrintException;
 
 public class Crud {
     private File file;
@@ -279,6 +278,29 @@ public class Crud {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void getAddress(long add) throws IOException{
+        fileReader.seek(add);
+        //fileReader.readUTF();
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+
+        try {
+            
+                position = fileReader.getFilePointer();
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if (lapide) {
+                    fileReader.readInt();
+                    movieId = fileReader.readUTF();
+                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()); // save the movie
+            }
+        } catch (Exception e) {
+            System.err.println("Id " +  "não encontrado");
+        }
+        //return selectMovie; 
     }
 
 }

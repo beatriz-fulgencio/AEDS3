@@ -269,6 +269,9 @@ public class Crud {
                 if (lapide) {
                     fileReader.readInt();
                     movieId = fileReader.readUTF();
+                    if(movieId.equals("1230")) {
+                        System.out.print(".");
+                    } 
                     Hash.AddItem(Integer.parseInt(movieId), pos);
                     fileReader.skipBytes(sizeMovie - 11);
                 } else {

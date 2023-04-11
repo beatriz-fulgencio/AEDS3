@@ -35,7 +35,7 @@ public class exTP {
 
         Directory hash = new Directory("Hash.db");
 
-        Menu(byteFileRandler, hash);
+        // Menu(byteFileRandler, hash);
 
 //         read(byteFileRandler);
 // // 
@@ -46,8 +46,8 @@ public class exTP {
 
       // hash.readFile();
 
-        // byteFileRandler.clear();
-        // hash.clear();
+        byteFileRandler.clear();
+        hash.clear();
     }
 
 
@@ -61,9 +61,15 @@ public class exTP {
         System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
         int resp = Integer.parseInt(sc.nextLine());
         if(resp == 1){
+            do{
             System.out.println("Digite o Id para buscar:");
             int id = Integer.parseInt(sc.nextLine());
             byteFileRandler.getAddress(hash.search(id));
+            System.out.println();
+            System.out.println();
+            System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
+             resp = Integer.parseInt(sc.nextLine());
+        } while(resp==1);
         }
         sc.close();
     }

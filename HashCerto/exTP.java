@@ -35,23 +35,20 @@ public class exTP {
 
         Directory hash = new Directory("Hash.db");
 
-        // Menu(byteFileRandler, hash);
+        Menu(byteFileRandler, hash);
 
-//         read(byteFileRandler);
-// // 
-//         byteFileRandler.read(hash);
+        ClearDataBases(byteFileRandler, hash);
+        
+    }
 
 
-//         byteFileRandler.getAddress(hash.search(3654));
-
-      // hash.readFile();
-
+    private static void ClearDataBases(Crud byteFileRandler, Directory hash) { //clear data bases
         byteFileRandler.clear();
         hash.clear();
     }
 
 
-    private static void Menu(Crud byteFileRandler, Directory hash) throws IOException {
+    private static void Menu(Crud byteFileRandler, Directory hash) throws IOException { //Menu that shows in terminal for interaction
         Scanner sc = new Scanner(System.in);
         System.out.println("Carregando base...");
         read(byteFileRandler);

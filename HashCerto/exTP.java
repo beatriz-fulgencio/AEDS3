@@ -35,17 +35,37 @@ public class exTP {
 
         Directory hash = new Directory("Hash.db");
 
-        read(byteFileRandler);
-// 
-        byteFileRandler.read(hash);
+        Menu(byteFileRandler, hash);
+
+//         read(byteFileRandler);
+// // 
+//         byteFileRandler.read(hash);
 
 
 //         byteFileRandler.getAddress(hash.search(3654));
 
-       hash.readFile();
+      // hash.readFile();
 
         // byteFileRandler.clear();
         // hash.clear();
+    }
+
+
+    private static void Menu(Crud byteFileRandler, Directory hash) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Carregando base...");
+        read(byteFileRandler);
+        System.out.println("Carregando base indexada com Hash...");
+        byteFileRandler.read(hash);
+        System.out.println("Bases Carregadas");
+        System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
+        int resp = Integer.parseInt(sc.nextLine());
+        if(resp == 1){
+            System.out.println("Digite o Id para buscar:");
+            int id = Integer.parseInt(sc.nextLine());
+            byteFileRandler.getAddress(hash.search(id));
+        }
+        sc.close();
     }
 
 }

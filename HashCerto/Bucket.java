@@ -76,6 +76,7 @@ public class Bucket {
         position = fileReader.getFilePointer();
         count++;
        }
+       int x = count-1;
     
     }
 

@@ -254,7 +254,6 @@ public class Crud {
         file.delete();
     }
 
-    //CRUD HASH
     public void read(Directory Hash) throws IOException {
         // Hash = new Directory("Hash.db");
         fileReader.seek(0); // set the poiter at the beggining of the file
@@ -284,186 +283,27 @@ public class Crud {
         }
     }
 
-    public void getAddress(long add) throws IOException{ //READ
-        fileReader.seek(add); // seeks the address recievied
+    public void getAddress(long add) throws IOException{
+        fileReader.seek(add);
         //fileReader.readUTF();
         int sizeMovie;
         boolean lapide;
         String movieId;
 
         try {
-               // position = fileReader.getFilePointer(); //save
-                sizeMovie = fileReader.readInt();//gets the size of the movie
-                lapide = fileReader.readBoolean(); //gets the lapide value
-                if (lapide) { //if lapide is true AKA if movie is not deleted
+            
+                position = fileReader.getFilePointer();
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if (lapide) {
                     fileReader.readInt();
-                    movieId = fileReader.readUTF(); //reads the movie id
-                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()); // prints the movie info
+                    movieId = fileReader.readUTF();
+                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()); // save the movie
             }
         } catch (Exception e) {
-            System.err.println("Id " +  "não encontrado"); //case the movie was not found AKA lapite == false
+            System.err.println("Id " +  "não encontrado");
         }
         //return selectMovie; 
     }
 
-    public void delete(long add) throws IOException{ //DELETE
-        fileReader.seek(add); // seeks the address recievied
-        //fileReader.readUTF();
-        int sizeMovie;
-        boolean lapide;
-        String movieId;
-
-        try {
-               position = fileReader.getFilePointer(); //save
-                sizeMovie = fileReader.readInt();//gets the size of the movie
-                position = fileReader.getFilePointer(); //saves the lapide's position
-                lapide = fileReader.readBoolean(); //gets the lapide value
-                if (lapide) { //if lapide is true AKA if movie is not deleted
-                    fileReader.seek(position);// return to lapide's position
-                    fileReader.writeBoolean(false); // delete the archive
-                    fileReader.readInt();
-                    movieId = fileReader.readUTF(); //reads the movie id
-                    System.out.print("Filme deletado:\n" + readMovie(sizeMovie, movieId, lapide).toString()); // prints the movie info
-            }
-        } catch (Exception e) {
-            System.err.println("Id " +  "não encontrado"); //case the movie was not found AKA lapite == false
-        }
-        //return selectMovie; 
-    }
-
-    public  void createHash(Directory Hash) throws Exception {
-        Scanner sc = new Scanner(System.in); // scanner to read terminal information
-        Movie movie = new Movie();
-
-        fileReader.seek(0);// go to the begginning of the file
-        String id = fileReader.readUTF();
-        long lastPos = Integer.parseInt(id); // get the last id
-        lastPos++; // increment last id
-        movie.set_movieId(lastPos); // set new id
-
-        /* Get written information ------------------------- */
-        System.out.println("Digite o título do filme:");
-        movie.set_title(sc.nextLine());
-
-        System.out.println("Digite os gêneros do filme (separe-os com vírgula): ");
-        movie.set_genres(sc.nextLine().split(","));
-
-        System.out.println("Digite a duração do filme (em minutos e só em números):");
-        movie.set_duration(Integer.parseInt(sc.nextLine()));
-
-        System.out.println("Digite o tipo do conteúdo (filme, documentário...):");
-        movie.set_contentType(sc.nextLine());
-
-        System.out.println("Digite a data de lançamento do filme (MMMM dd, yyyy):");
-        movie.set_dateAdded(sc.nextLine());
-
-        // System.out.println(movie);
-
-        writeMovie(movie);// add movie to byte file
-
-        sc.close();
-
-        long pos = fileReader.length();
-
-        Hash.AddItem(Integer.parseInt(id), pos);
-
-    }
-
-    public void update(long add, Directory Hash) throws IOException{ //UPDATE
-        fileReader.seek(add); // seeks the address recievied
-        //fileReader.readUTF();
-        int sizeMovie;
-        boolean lapide;
-        String movieId;
-
-        try {
-               // position = fileReader.getFilePointer(); //save
-                sizeMovie = fileReader.readInt();//gets the size of the movie
-                lapide = fileReader.readBoolean(); //gets the lapide value
-                if (lapide) { //if lapide is true AKA if movie is not deleted
-                    fileReader.readInt();
-                    movieId = fileReader.readUTF(); //reads the movie id
-                    Movie movie = readMovie(sizeMovie, movieId, lapide); 
-                    Scanner sc = new Scanner(System.in);
-                    if (movie != null) {
-                        System.out.println("Filme selecionado: ----------------");
-                        System.out.println(movie); // show movie selected
-                        System.out.println("--------------------------");
-                        System.out.println(
-                                "Qual informação deseja alterar:\n a)Nome do filme\nb)Gêneros\nc)Duração\nd)Tipo do conteúdo\ne)Data de lançamento");
-                        String option = sc.nextLine();
-            
-                        switch (option) { // modify wanted atribute
-                            case "a":
-                            case "A":
-                                System.out.println("Digite o novo título:");
-                                movie.set_title(sc.nextLine());
-                                System.out.println("Editado :)");
-                                break;
-                            case "b":
-                            case "B":
-                                System.out.println("Digite o novos gêneros (separe-os com vírgula):");
-                                movie.set_genres(sc.nextLine().split(","));
-                                System.out.println();
-                                System.out.println("Editado :)");
-
-                                break;
-                            case "c":
-                            case "C":
-                                System.out.println("Digite a nova duração (em minutos):");
-                                movie.set_duration(Integer.parseInt(sc.nextLine()));
-                                System.out.println();
-                                System.out.println("Editado :)");
-
-                                break;
-                            case "d":
-                            case "D":
-                                System.out.println("Digite o novo tipo de conteúdo:");
-                                movie.set_contentType(sc.nextLine());
-                                System.out.println();
-                                System.out.println("Editado :)");
-
-                                break;
-                            case "e":
-                            case "E":
-                                System.out.println("Digite a nova data de lançamento (MMM dd, YYYY)");
-                                movie.set_dateAdded(sc.nextLine());
-                                System.out.println();
-                                System.out.println("Editado :)");
-
-                                break;
-                            default:
-                                System.out.println("Arquivo não alterado");
-                                System.out.println();
-                                System.out.println("Editado :)");
-                        }
-                        sc.close();
-            
-                        byte[] ba = movie.toByteArray();
-                        fileReader.seek(position);
-                        int sizeLastMovie = fileReader.readInt();
-                        if (ba.length <= sizeLastMovie) { // if the size is the same write in the same place
-                            fileReader.write(ba);
-                            System.out.println(movie.toString());
-                        } else { // else delete the current file and save the modified one as new
-                            fileReader.writeBoolean(false);
-
-                            long pos = fileReader.length();
-
-                            Hash.AddItem(Integer.parseInt(movie.get_movieId()), pos);
-
-                            System.out.println(movie.toString());
-
-                            writeMovie(movie);
-                        }
-                        //System.out.println();
-            
-                    }
-                    
-            }
-        } catch (Exception e) {
-            System.err.println("Id " +  "não encontrado"); //case the movie was not found AKA lapite == false
-        }
-        //return selectMovie; 
-    }
 }

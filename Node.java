@@ -1,45 +1,59 @@
 public class Node {
 
-    private int n; //Atributo que guarda a quantidade de chaves no nó
-    private int[] chave; //vetor das chaves
-    private int[] filho;//vetor dos filhos
-    private boolean folha;//Atributo que indica se a nó eh folha ou nao
+    int currentElements; // Atributo que guarda a quantidade de chaves no nó
+    Key[] key; // vetor das chaves
+    private Node[] filho;// vetor dos filhos
+    boolean isLeaf;// Atributo que indica se a nó eh isLeaf ou nao
+    public Node[] children;
 
-    public Node(int n) {
-        this.chave = null;
+    public Node() {
+        this.key = null;
         this.filho = null;
-        this.n = 0;
+        this.currentElements = 0;
     }
 
-    public int[] getChave() {
-        return chave;
+    public Key[] getKey() {
+        return key;
     }
 
-    public void setChave(int[] chave) {
-        this.chave = chave;
+    public void setKey(Key[] key) {
+        this.key = key;
     }
 
-    public int[] getFilho() {
+    public Node[] getFilho() {
         return filho;
     }
 
-    public void setFilho(int[] filho) {
+    public void setFilho(Node[] filho) {
         this.filho = filho;
     }
 
-    public boolean isFolha() {
-        return folha;
+    public boolean getisLeaf() {
+        return isLeaf;
     }
 
-    public void setFolha(boolean folha) {
-        this.folha = folha;
+    public void setisLeaf(boolean isLeaf) {
+        this.isLeaf = isLeaf;
     }
 
     public int getN() {
-        return n;
+        return currentElements;
     }
 
-    public void setN(int n) {
-        this.n = n;
+    public void setN(int currentElements) {
+        this.currentElements = currentElements;
+    }
+
+    public int searchKey(int k) { // searches a key on a node
+        int searchKey = -1;
+        for (int i = 0; i < this.currentElements; i++) { // if it still has keys in that node
+            if (this.key[i].id == k) { // if found
+                searchKey = i; // returns the position of the idin the node
+            } else {
+                searchKey = -1;
+            }
+        }
+        return searchKey;
     }
 }
+

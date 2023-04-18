@@ -1,7 +1,4 @@
-import java.io.RandomAccessFile;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 public class BTree {
 
@@ -16,26 +13,6 @@ public class BTree {
     private int elements; // min number of elements in each node
     private int nodeControl = 0; // number of nodes
     private boolean found = false;
-
-    // creates the node
-    public class Node {
-        Key key[] = new Key[2 * elements - 1]; // creates the node
-        Node children[] = new Node[2 * elements]; // creates the node's children
-        boolean isLeaf = true;
-        int currentElements; // current elements on the node
-
-        public int searchKey(int k) { // searches a key on a node
-            int searchKey = -1;
-            for (int i = 0; i < this.currentElements; i++) { // if it still has keys in that node
-                if (this.key[i].id == k) { // if found
-                    searchKey = i; // returns the position of the idin the node
-                } else {
-                    searchKey = -1;
-                }
-            }
-            return searchKey;
-        }
-    }
 
     // creates a new tree
     public BTree(int t) {
@@ -115,7 +92,7 @@ public class BTree {
     }
 
     // inserts on the node
-    final private void insertKey(Node node, Key key) {
+    private void insertKey(Node node, Key key) {
         if (node.isLeaf) {
             int i = 0;
             for (i = node.currentElements - 1; i >= 0 && key.id < node.key[i].id; i--) { // if the id is smaller
@@ -156,6 +133,16 @@ public class BTree {
             }
         }
     }
+
+
+
+
+    
+    // daqui pra baixo precisa mudar
+
+
+
+
 
     // writing on the index file
     public void writeIndex() throws IOException {

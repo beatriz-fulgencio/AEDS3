@@ -254,34 +254,34 @@ public class Crud {
         file.delete();
     }
 
-    public void read(Directory Hash) throws IOException {
-        // Hash = new Directory("Hash.db");
-        fileReader.seek(0); // set the poiter at the beggining of the file
-        fileReader.readUTF();// skip last id
-        int sizeMovie;
-        boolean lapide;
-        String movieId;
-        try {
-            while (fileReader.getFilePointer() < fileReader.length()) { // while the file is not done
-                long pos = fileReader.getFilePointer();
-                sizeMovie = fileReader.readInt(); // read the size of the object being read
-                lapide = fileReader.readBoolean(); // see if movie is valid
-                if (lapide) {
-                    fileReader.readInt();
-                    movieId = fileReader.readUTF();
-                    if(movieId.equals("1230")) {
-                        System.out.print(".");
-                    } 
-                    Hash.AddItem(Integer.parseInt(movieId), pos);
-                    fileReader.skipBytes(sizeMovie - 11);
-                } else {
-                    fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // public void read(Directory Hash) throws IOException {
+    //     // Hash = new Directory("Hash.db");
+    //     fileReader.seek(0); // set the poiter at the beggining of the file
+    //     fileReader.readUTF();// skip last id
+    //     int sizeMovie;
+    //     boolean lapide;
+    //     String movieId;
+    //     try {
+    //         while (fileReader.getFilePointer() < fileReader.length()) { // while the file is not done
+    //             long pos = fileReader.getFilePointer();
+    //             sizeMovie = fileReader.readInt(); // read the size of the object being read
+    //             lapide = fileReader.readBoolean(); // see if movie is valid
+    //             if (lapide) {
+    //                 fileReader.readInt();
+    //                 movieId = fileReader.readUTF();
+    //                 if(movieId.equals("1230")) {
+    //                     System.out.print(".");
+    //                 } 
+    //                 Hash.AddItem(Integer.parseInt(movieId), pos);
+    //                 fileReader.skipBytes(sizeMovie - 11);
+    //             } else {
+    //                 fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
+    //             }
+    //         }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public void getAddress(long add) throws IOException{
         fileReader.seek(add);

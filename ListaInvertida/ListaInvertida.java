@@ -9,4 +9,6 @@ public class ListaInvertida {
         this.file = new File(F); // creates the "file" file
         fileReader = new RandomAccessFile(file, "rw");
     }
+
+    
 }

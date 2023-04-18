@@ -5,8 +5,8 @@ public class Element {
     private long address; // the buckets beggining address
     private int id; // movie id
 
-    File file;
-    RandomAccessFile fileReader;
+    // File file;
+    // RandomAccessFile fileReader;
 
     // constructor
     public Element() {
@@ -14,10 +14,10 @@ public class Element {
         this.id = 0;
     }
 
-    public Element(long address, int id) throws FileNotFoundException {
+    public Element(long address, int id) {
         this.address = address;
         this.id = id;
-        fileReader = new RandomAccessFile(file, "rw");
+       // fileReader = new RandomAccessFile(file, "rw");
     }
 
     // gets and sets
@@ -38,15 +38,15 @@ public class Element {
     }
 
     // file reader and writer
-    public void WriteFile() throws IOException {
-        fileReader.seek(address); // seeks the buckets addres in the hash file
-        fileReader.writeInt(id); // writes movie id
-        fileReader.writeLong(address); // writes address
-    }
+    // public void WriteFile() throws IOException {
+    //     fileReader.seek(address); // seeks the buckets addres in the hash file
+    //     fileReader.writeInt(id); // writes movie id
+    //     fileReader.writeLong(address); // writes address
+    // }
 
-    public void readFile(long pos) throws IOException {
-        fileReader.seek(pos); // seeks the address provided
-        id = fileReader.readInt(); // reads the id
-        address = fileReader.readLong(); // reads address
-    }
+    // public void readFile(long pos) throws IOException {
+    //     fileReader.seek(pos); // seeks the address provided
+    //     id = fileReader.readInt(); // reads the id
+    //     address = fileReader.readLong(); // reads address
+    // }
 }

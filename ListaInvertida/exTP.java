@@ -16,6 +16,7 @@ public class exTP {
             while ( sc.hasNextLine()) {
                 Movie movie = new Movie(qntde++);
                 movie.read(sc.nextLine());
+
                 bfr.writeMovie(movie);
                 i++;
             }
@@ -28,12 +29,13 @@ public class exTP {
 
     }
 
+
    
     public static void main(String[] args) throws Exception {
 
         Crud byteFileRandler = new Crud("movies.db");
 
-        
+
         // Directory hash = new Directory("Hash.db");
 
         // Menu(byteFileRandler, hash);
@@ -42,6 +44,7 @@ public class exTP {
         
     }
 
+    
 
     // private static void ClearDataBases(Crud byteFileRandler, Directory hash) { //clear data bases
     //     byteFileRandler.clear();

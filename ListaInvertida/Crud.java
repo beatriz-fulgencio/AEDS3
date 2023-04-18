@@ -306,4 +306,10 @@ public class Crud {
         //return selectMovie; 
     }
 
+    public void counter(boolean lapide) {
+        if (getlapide = true) {
+
+        }
+    }
+
 }

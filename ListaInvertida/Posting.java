@@ -59,10 +59,8 @@ public class Posting {
 
     }
 
-
     public long getAddress(){
         return address; //returns bucket address
     }
-
-    
+ 
 }

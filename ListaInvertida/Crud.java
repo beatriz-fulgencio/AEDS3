@@ -306,13 +306,6 @@ public class Crud {
         //return selectMovie; 
     }
 
-    // public void counter(boolean lapide) {
-    //     if (getlapide = true) {
-
-    //     }
-    // }
-
-
 
     //Create -> chamar o adiconar da lista invertida
 
@@ -321,5 +314,5 @@ public class Crud {
     //update-> se o endereço mudar chamar um add e delete
 
     //delete -> chamar todos os generos do filme e remover o id
-
+    
 }

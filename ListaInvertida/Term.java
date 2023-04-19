@@ -46,4 +46,13 @@ public class Term {
 
         return p.getElements();
     }
+
+    public void removeFromPosting(int id) throws Exception{
+        Posting p = new Posting(address, file);
+
+        p.readFile(address);
+
+        p.removeElement(id);
+
+    }
 }

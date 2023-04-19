@@ -7,8 +7,6 @@ public class List {
 
     ArrayList<Term> terms;
 
-
-
     public List(String F) throws IOException {
         this.file = new File(F); // creates the "file" file
         fileReader = new RandomAccessFile(file, "rw");
@@ -17,6 +15,10 @@ public class List {
     }
 
     public void addItem(String gen, long address, int id) throws Exception {
+        if (gen.equals(" Sports Movies")){
+            String s="";
+        }
+        gen = gen.strip();
         boolean resp = false;
         for (Term term : terms) {
             if (gen.equals(term.genre)) {
@@ -31,27 +33,20 @@ public class List {
             t.createPosting(address, id);// adicionar endereco ao posting
             terms.add(t);
         }
+
+        if (id == 3860) {
+            String x = "s";
+        }
     }
 
     // read -> for each term retornar posting e buscar no movie.db cada item
     public ArrayList<Element> readOneParameter(String gen) throws Exception {
-        //long ad = -1;
-
+         gen = gen.strip();
         // searchs each genre in that movie
         for (Term term : terms) {
             // if genre exists in that movie
             if (gen.equals(term.genre)) {
                 return term.getPostingElements();
-                // // get posting address
-                // ad = p.getAddress();
-                // // seek the address
-                // fileReader.seek(ad);
-                // // reads the id
-                // int id = fileReader.readInt();
-                // // prints the id
-                // System.out.println(id);
-            } else { // if genre doesnt exist in that movie
-               // ad = -1;
             }
         }
         return null;
@@ -61,26 +56,28 @@ public class List {
     // os ids em ambos e buscar esses no movie.db
 
     public ArrayList<Element> readTwoParameter(String gen1, String gen2) throws Exception {
-        ArrayList<Element> list1 =  null;
+        ArrayList<Element> list1 = null;
         ArrayList<Element> list2 = null;
         ArrayList<Element> list3 = new ArrayList<Element>();
 
+        gen1 = gen1.strip();
+        gen2 = gen2.strip();
         for (Term term : terms) {
             if (gen1.equals(term.genre)) {
                 list1 = term.getPostingElements();
-            } 
+            }
             if (gen2.equals(term.genre)) {
                 list2 = term.getPostingElements();
-            } 
+            }
 
-            if(list1!=null && list2!= null){
+            if (list1 != null && list2 != null) {
                 break;
             }
         }
 
         for (Element el : list1) {
-            for (Element el2: list2) {
-                if(el.get_id()==el2.get_id()){
+            for (Element el2 : list2) {
+                if (el.get_id() == el2.get_id()) {
                     list3.add(el2);
                     break;
                 }
@@ -92,8 +89,15 @@ public class List {
 
     // delete -> entrar no termo, entrar no posting e deletar element
 
-    public void delete(int id){
-        
+    public void delete(int id, String[] genres) throws Exception {
+        for (String g : genres) {
+            g = g.strip(); 
+                       for (Term term : terms) {
+                if (term.genre.equals(g)) {
+                    term.removeFromPosting(id);
+                }
+            }
+        }
     }
 
     public void clear() {

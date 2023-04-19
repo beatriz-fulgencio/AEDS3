@@ -72,5 +72,12 @@ public class Posting {
     public long getAddress(){
         return address; //returns bucket address
     }
- 
+    
+    public void removeElement(int id){
+        for (Element el : posting) {
+            if(el.get_id()==id){
+                posting.remove(el);
+            }
+        }
+    }
 }

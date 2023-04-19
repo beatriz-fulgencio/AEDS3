@@ -10,6 +10,8 @@ public class Posting {
     long address; // the postings beggining address
     ArrayList<Element> posting; // the actual posting of elements
 
+    int max = 500;
+
     public Posting(long address, File F) throws FileNotFoundException {
         this.address = address;
         posting = new ArrayList<Element>();
@@ -40,7 +42,14 @@ public class Posting {
             fileReader.writeLong(el.get_address());
         }
 
-        fileReader.writeInt(-1);
+
+        if(posting.size()<max){ //for all open space left in the posting writes -1 (space holder)
+            int length = max - posting.size();
+            for(int i=0; i<length;i++){
+                fileReader.writeLong(-1);
+                fileReader.writeInt(-1);
+            }
+        }
     }
 
     public void readFile(long add) throws IOException {
@@ -55,6 +64,7 @@ public class Posting {
             long elAdd = fileReader.readLong();
             Element el = new Element(elAdd, id);
             posting.add(el);
+            pos = fileReader.getFilePointer();
         }
 
     }

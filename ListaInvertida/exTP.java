@@ -4,9 +4,9 @@ import java.util.*;
 
 public class exTP {
 
-    public static int qntde = /*3860*/ 0;
+    public static int qntde = 0/*3860*/ ;
 
-    public static void read(Crud bfr) throws FileNotFoundException {
+    public static void read(Crud bfr, List l) throws FileNotFoundException {
         File file = new File("netflix.csv");
         Scanner sc = null;
 
@@ -16,8 +16,8 @@ public class exTP {
             while ( sc.hasNextLine()) {
                 Movie movie = new Movie(qntde++);
                 movie.read(sc.nextLine());
-
-                bfr.writeMovie(movie);
+                bfr.writeMovie(movie, l);
+                System.out.print(i+" ");
                 i++;
             }
         } catch (IOException e) {
@@ -35,44 +35,46 @@ public class exTP {
 
         Crud byteFileRandler = new Crud("movies.db");
 
+        List list = new List("InvIndex.db");
 
         // Directory hash = new Directory("Hash.db");
 
-        // Menu(byteFileRandler, hash);
+        Menu(byteFileRandler, list);
 
-        // ClearDataBases(byteFileRandler, hash);
+        ClearDataBases(byteFileRandler, list);
         
     }
 
     
 
-    // private static void ClearDataBases(Crud byteFileRandler, Directory hash) { //clear data bases
-    //     byteFileRandler.clear();
-    //     hash.clear();
-    // }
+    private static void ClearDataBases(Crud byteFileRandler, List list) { //clear data bases
+        byteFileRandler.clear();
+        list.clear();
+    }
 
 
-    // private static void Menu(Crud byteFileRandler, Directory hash) throws IOException { //Menu that shows in terminal for interaction
-    //     Scanner sc = new Scanner(System.in);
-    //     System.out.println("Carregando base...");
-    //     read(byteFileRandler);
-    //     System.out.println("Carregando base indexada com Hash...");
-    //     byteFileRandler.read(hash);
-    //     System.out.println("Bases Carregadas");
-    //     System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
-    //     int resp = Integer.parseInt(sc.nextLine());
-    //     if(resp == 1){
-    //         do{
-    //         System.out.println("Digite o Id para buscar:");
-    //         int id = Integer.parseInt(sc.nextLine());
-    //         byteFileRandler.getAddress(hash.search(id));
-    //         System.out.println();
-    //         System.out.println();
-    //         System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
-    //          resp = Integer.parseInt(sc.nextLine());
-    //     } while(resp==1);
-    //     }
-    //     sc.close();
-    // }
+    private static void Menu(Crud byteFileRandler, List listIndex) throws Exception { //Menu that shows in terminal for interaction
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Carregando base...");
+        read(byteFileRandler, listIndex);
+        byteFileRandler.getMoviesInPosting(listIndex.readOneParameter("Documentaries"));
+        // System.out.println("Carregando base indexada com Hash...");
+        // byteFileRandler.read(hash);
+        // System.out.println("Bases Carregadas");
+        // System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
+        // int resp = Integer.parseInt(sc.nextLine());
+        // if(resp == 1){
+        //     do{
+        //     System.out.println("Digite o Id para buscar:");
+        //     int id = Integer.parseInt(sc.nextLine());
+        //     byteFileRandler.getAddress(hash.search(id));
+        //     System.out.println();
+        //     System.out.println();
+        //     System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
+        //      resp = Integer.parseInt(sc.nextLine());
+        // } while(resp==1);
+        // }
+        sc.close();
+    }
 
 }

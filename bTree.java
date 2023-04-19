@@ -206,7 +206,7 @@ public class BTree {
 
 
 
-    
+
 
     // read file
     public void readFile() throws IOException {
@@ -296,5 +296,10 @@ public class BTree {
             pos += 92; // why 92?
         } while (pos <= file.length());
         file.close();
+    }
+
+    // delete file
+    public void clear() {
+        file.delete(); 
     }
 }

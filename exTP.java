@@ -29,31 +29,43 @@ public class exTP {
     }
 
     public static void main(String[] args) throws Exception {
+
         Crud byteFileRandler = new Crud("movies.db");
 
+        BTree hash = new BTree("tree.db");
+
+        Menu(byteFileRandler, tree);
+
+        ClearDataBases(byteFileRandler, hash);
+        
+    }
+
+    private static void Menu(Crud byteFileRandler, BTree tree) throws IOException { //Menu that shows in terminal for interaction
+        // Scanner sc = new Scanner(System.in);
+        // System.out.println("Carregando base...");
         // read(byteFileRandler);
+        // System.out.println("Carregando base indexada com Hash...");
+        // byteFileRandler.read(tree);
+        // System.out.println("Bases Carregadas");
+        // System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
+        // int resp = Integer.parseInt(sc.nextLine());
+        // if(resp == 1){
+        //     do{
+        //     System.out.println("Digite o Id para buscar:");
+        //     int id = Integer.parseInt(sc.nextLine());
+        //     byteFileRandler.getAddress(tree.search(id));
+        //     System.out.println();
+        //     System.out.println();
+        //     System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
+        //      resp = Integer.parseInt(sc.nextLine());
+        // } while(resp==1);
+        // }
+        // sc.close();
+    }
 
-        //  byteFileRandler.clear();
-        // byteFileRandler.read("0000");
-
-        // byteFileRandler.update("0002");
-
-        // byteFileRandler.update("0000");
-
-        Sort fileSort = new Sort("movies.db");
-
-        // fileSort.clear();
-
-        fileSort.intercalacaoBalanceadaComum();
-
-        // byteFileRandler.create();
-        // byteFileRandler.delete("0099");
-        // byteFileRandler.update("0002");
-        // System.out.println(byteFileRandler.select("0002"));
-        // System.out.println(byteFileRandler.select("0003"));
-
-        BTree tree = new BTree("movies.db");
-        tree.show();
+    private static void ClearDataBases(Crud byteFileRandler, BTree tree) { //clear data bases
+        byteFileRandler.clear();
+        tree.clear();
     }
 
 }

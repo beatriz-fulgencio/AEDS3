@@ -7,6 +7,7 @@ public class Crud {
     private File file;
     private RandomAccessFile fileReader;
     private long position;
+    private bTree indexedFile;
 
     Crud(String file) throws FileNotFoundException {
         this.file = new File(file); // creates the "file" file
@@ -249,5 +250,66 @@ public class Crud {
     }
 
 
+
+    // 
+
+
+
+    public void read(bTree tree) throws IOException {
+        fileReader.seek(0); // set the pointer at the beggining of the file
+        fileReader.readUTF();// skip last id
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+        try {
+            while (fileReader.getFilePointer() < fileReader.length()) { // while the file is not done
+                long pos = fileReader.getFilePointer();
+                sizeMovie = fileReader.readInt(); // read the size of the object being read
+                lapide = fileReader.readBoolean(); // see if movie is valid
+                if (lapide) {
+                    fileReader.readInt();
+                    movieId = fileReader.readUTF();
+                    if(movieId.equals("1230")) {
+                        System.out.print(".");
+                    } 
+                    
+
+                    // ???
+                
+                    // tree.insertion(Integer.parseInt(movieId));
+
+
+
+
+                    fileReader.skipBytes(sizeMovie - 11);
+                } else {
+                    fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }  
+
+    public void getAddress(long add) throws IOException{
+        fileReader.seek(add);
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+
+        try {
+            
+                position = fileReader.getFilePointer();
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if (lapide) {
+                    fileReader.readInt();
+                    movieId = fileReader.readUTF();
+                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()); // save the movie
+            }
+        } catch (Exception e) {
+            System.err.println("Id não encontrado");
+        }
+    }
    
 }

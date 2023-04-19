@@ -76,7 +76,7 @@ public class bTree {
     }
 
     // insertion
-    public void insertion(final Key key) {
+    public void insertion(Key key) {
         Node currentRoot = root; // gets the current root
         if (currentRoot.currentElements == 2 * elements - 1) { // root is full
             Node newNode = new Node(); // creates new node
@@ -143,10 +143,10 @@ public class bTree {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw"); // what file?
         int pointer = 0;
 
-        // if (pointer == 0) {
-        // file.writeInt(4);
-        // pointer = 4;
-        // }
+        if (pointer == 0) {
+        file.writeInt(4);
+        pointer = 4;
+        }
 
         int cont = 0;
         if (node == root) {
@@ -211,8 +211,7 @@ public class bTree {
     // read file
     public void readFile() throws IOException {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw");
-        // int pos = 4;
-        int pos = 0;
+        int pos = 4;
         while (pos <= file.length()) {
             file.seek(pos);
             int counter = file.readInt(); // how many elements in that node

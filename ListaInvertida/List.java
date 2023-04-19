@@ -15,9 +15,7 @@ public class List {
     }
 
     public void addItem(String gen, long address, int id) throws Exception {
-        if (gen.equals(" Sports Movies")){
-            String s="";
-        }
+
         gen = gen.strip();
         boolean resp = false;
         for (Term term : terms) {

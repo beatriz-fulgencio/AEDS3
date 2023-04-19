@@ -4,7 +4,7 @@ public class BTree {
 
     private File file;
     private RandomAccessFile fileReader;
-    
+
     BTree(String file) throws FileNotFoundException {
         this.file = new File(file); // creates the "file" file
         fileReader = new RandomAccessFile(file, "rw"); // opens the file in read and write mode
@@ -105,8 +105,8 @@ public class BTree {
             for (i = node.currentElements - 1; i >= 0 && key.id < node.key[i].id; i--) {
                 // acha a posicao do novo element que sera inserido
             }
-            i++; 
-            Node temp = node.children[i]; 
+            i++;
+            Node temp = node.children[i];
             if (temp.currentElements == 2 * elements - 1) { // if the node is full
                 split(node, i, temp);
                 if (key.id > node.key[i].id) {
@@ -123,7 +123,7 @@ public class BTree {
     }
 
     private void show(Node node) { // starting by the root
-        for (int i = 0; i < node.currentElements; i++) {  // goes through all the elements
+        for (int i = 0; i < node.currentElements; i++) { // goes through all the elements
             System.out.print(node.key[i].id + " ");
         }
         System.out.print("\n");
@@ -134,42 +134,32 @@ public class BTree {
         }
     }
 
-
-
-
-    
-    // daqui pra baixo precisa mudar
-
-
-
-
-
     // writing on the index file
     public void writeIndex() throws IOException {
         writeIndex(root);
     }
 
-    public void writeIndex(Node node) throws IOException { 
+    public void writeIndex(Node node) throws IOException {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw"); // what file?
         int pointer = 0;
 
-        if (pointer == 0) {
-            file.writeInt(4);
-            pointer = 4;
-        }
+        // if (pointer == 0) {
+        // file.writeInt(4);
+        // pointer = 4;
+        // }
 
         int cont = 0;
         if (node == root) {
             file.seek(pointer);
             file.writeInt(node.currentElements); // number of elements in the node
-            
-            for (int i=0; i<node.currentElements; i++) {
+
+            for (int i = 0; i < node.currentElements; i++) { // writes each element
                 file.writeInt(pointer);
                 file.writeInt(node.key[i].id);
                 file.writeLong(node.key[i].address);
             }
-            pointer = writeIndex(node.children[cont++], pointer);
-            file.writeInt(pointer);
+            pointer = writeIndex(node.children[cont++], pointer); // children node
+            file.writeInt(pointer); // writes where the pointers address
         }
 
         file.close();
@@ -177,33 +167,32 @@ public class BTree {
 
     public int writeIndex(Node node, int pointer) throws IOException {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw"); // what file?
-        
-        int pointerLeaf = -1;
+
+        int pointerLeaf = -1; // points to nothing
         int cont = 0;
 
         if (node != null) { // if the node exists
             nodeControl++;
             if (!node.isLeaf) { // if the node is not a leaf
                 file.seek(pointer);
-                file.writeInt(node.currentElements); 
-                
-                for (int i=0; i<node.currentElements; i++) {
+                file.writeInt(node.currentElements); // writes the number of elements in the node
+
+                for (int i = 0; i < node.currentElements; i++) { // writes each element
                     file.writeInt(pointer);
                     file.writeInt(node.key[i].id);
                     file.writeLong(node.key[i].address);
                 }
-                file.writeInt(pointer);
+                file.writeInt(pointer); // writes address of the next node
                 pointer = writeIndex(node.children[cont++], pointer);
-            } 
-            else { // is the node is a leaf
-                file.seek(pointer); 
-                file.writeInt(node.currentElements); 
-                for (int i=0; i<node.currentElements; i++) {
+            } else { // is the node is a leaf
+                file.seek(pointer);
+                file.writeInt(node.currentElements);
+                for (int i = 0; i < node.currentElements; i++) {
                     file.writeInt(pointer);
                     file.writeInt(node.key[i].id);
                     file.writeLong(node.key[i].address);
                 }
-                file.writeInt(pointerLeaf);
+                file.writeInt(pointerLeaf); // writes address -1
             }
         }
         file.close();
@@ -211,20 +200,28 @@ public class BTree {
     }
 
 
+
+
+    // daqui pra baixo precisa mudar
+
+
+
+    
+
     // read file
     public void readFile() throws IOException {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw");
-        int pos = 4;
-        while(pos <= file.length()) {
+        // int pos = 4;
+        int pos = 0;
+        while (pos <= file.length()) {
             file.seek(pos);
-            int counter = file.readInt();
+            int counter = file.readInt(); // how many elements in that node
             System.out.println();
-            for (int i = 0; i < counter; i++) {
-                System.out.println("pont: " + file.readInt());
-                System.out.println("id: " + file.readInt());
-                System.out.println("end: " + file.readInt());
+            for (int i = 0; i < counter; i++) { // prints the elements
+                System.out.println(
+                        "Pointer: " + file.readInt() + "; ID: " + file.readInt() + "; Address: " + file.readInt());
             }
-            System.out.println("pont: " + file.readInt());
+            System.out.println("Pointer: " + file.readInt());
         }
         file.close();
     }
@@ -279,7 +276,8 @@ public class BTree {
 
     public void updateAddress(int id, int address) throws IOException {
         RandomAccessFile file = new RandomAccessFile("file.db", "rw");
-        int pos = 4;
+        // int pos = 4;
+        int pos = 0;
         int pointer;
         do {
             file.seek(pos);
@@ -295,7 +293,7 @@ public class BTree {
                 }
             }
             pointer = file.readInt();
-            pos += 92;
+            pos += 92; // why 92?
         } while (pos <= file.length());
         file.close();
     }

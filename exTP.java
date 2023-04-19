@@ -32,38 +32,41 @@ public class exTP {
 
         Crud byteFileRandler = new Crud("movies.db");
 
-        BTree hash = new BTree("tree.db");
+        bTree tree = new bTree("tree.db");
 
         Menu(byteFileRandler, tree);
 
-        ClearDataBases(byteFileRandler, hash);
+        ClearDataBases(byteFileRandler, tree);
         
     }
 
-    private static void Menu(Crud byteFileRandler, BTree tree) throws IOException { //Menu that shows in terminal for interaction
-        // Scanner sc = new Scanner(System.in);
-        // System.out.println("Carregando base...");
-        // read(byteFileRandler);
-        // System.out.println("Carregando base indexada com Hash...");
-        // byteFileRandler.read(tree);
-        // System.out.println("Bases Carregadas");
+    private static void Menu(Crud byteFileRandler, bTree tree) throws IOException { //Menu that shows in terminal for interaction
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Carregando base...");
+        read(byteFileRandler);
+        System.out.println("Carregando base indexada...");
+        byteFileRandler.read(tree);
+        System.out.println("Bases Carregadas");
+
+
         // System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
         // int resp = Integer.parseInt(sc.nextLine());
         // if(resp == 1){
         //     do{
         //     System.out.println("Digite o Id para buscar:");
         //     int id = Integer.parseInt(sc.nextLine());
-        //     byteFileRandler.getAddress(tree.search(id));
+        //     byteFileRandler.getAddress(tree.searchFile(id));
         //     System.out.println();
         //     System.out.println();
         //     System.out.println("Deseja buscar um filme pelo seu Id? (1 para sim e 0 para nao)");
         //      resp = Integer.parseInt(sc.nextLine());
         // } while(resp==1);
         // }
-        // sc.close();
+        
+        sc.close();
     }
 
-    private static void ClearDataBases(Crud byteFileRandler, BTree tree) { //clear data bases
+    private static void ClearDataBases(Crud byteFileRandler, bTree tree) { //clear data bases
         byteFileRandler.clear();
         tree.clear();
     }

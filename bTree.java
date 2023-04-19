@@ -1,11 +1,11 @@
 import java.io.*;
 
-public class BTree {
+public class bTree {
 
     private File file;
     private RandomAccessFile fileReader;
 
-    BTree(String file) throws FileNotFoundException {
+    bTree(String file) throws FileNotFoundException {
         this.file = new File(file); // creates the "file" file
         fileReader = new RandomAccessFile(file, "rw"); // opens the file in read and write mode
     }
@@ -15,7 +15,7 @@ public class BTree {
     private boolean found = false;
 
     // creates a new tree
-    public BTree(int t) {
+    public bTree(int t) {
         elements = t;
         root = new Node();
         root.currentElements = 0;

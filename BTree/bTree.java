@@ -76,7 +76,8 @@ public class bTree {
     }
 
     // insertion
-    public void insertion(Key key) {
+    public void insertion(int id, long address) {
+        Key key = new Key(id, address);
         Node currentRoot = root; // gets the current root
         if (currentRoot.currentElements == 2 * elements - 1) { // root is full
             Node newNode = new Node(); // creates new node

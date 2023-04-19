@@ -276,7 +276,7 @@ public class Crud {
 
                     // ???
                 
-                    // tree.insertion(Integer.parseInt(movieId));
+                    tree.insertion(Integer.parseInt(movieId));
 
 
 

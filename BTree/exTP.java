@@ -32,7 +32,7 @@ public class exTP {
 
         Crud byteFileRandler = new Crud("movies.db");
 
-        bTree tree = new bTree("tree.db");
+        bTree tree = new bTree("movies.db");
 
         Menu(byteFileRandler, tree);
 

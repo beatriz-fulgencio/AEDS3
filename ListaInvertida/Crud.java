@@ -216,6 +216,7 @@ public class Crud {
         // System.out.println(movie);
 
         writeMovie(movie, l);// add movie to byte file
+        System.out.println("Novo filme:\n" + movie.toString());
 
         sc.close();
     }

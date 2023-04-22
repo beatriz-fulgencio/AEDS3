@@ -35,11 +35,22 @@ public class exTP {
 
         List list = new List("InvIndex.db");
 
-        // Directory hash = new Directory("Hash.db");
-
-        Menu(byteFileRandler, list);
+        LoadDataBases(byteFileRandler, list);
+        CrudMenu(byteFileRandler, list);
 
         ClearDataBases(byteFileRandler, list);
+
+    }
+
+
+
+    private static void LoadDataBases(Crud byteFileRandler, List list) throws FileNotFoundException {
+
+        System.out.println("Carregando base...");
+        read(byteFileRandler, list);
+        System.out.println();
+        System.out.println("Bases Carregadas");
+        // --------------------------------------------
 
     }
 
@@ -48,13 +59,75 @@ public class exTP {
         list.clear();
     }
 
-    private static void Menu(Crud byteFileRandler, List listIndex) throws Exception { // Menu that shows in terminal for
-                                                                                      // interaction
+    private static void CrudMenu(Crud byteFileRandler, List list) throws Exception {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Carregando base...");
-        read(byteFileRandler, listIndex);
-        System.out.println("Bases Carregadas");
-        // --------------------------------------------
+        
+
+        System.out.println(
+                "O que deseja fazer?\n1 - Criar novo filme\n2 - Pesquisar Filmes por Gênero;\n3 - Atualizar os dados de um filme;\n4 - Deletar um filme");
+        int op = Integer.parseInt(sc.nextLine());
+        int id;
+        String idString;
+        do{
+        switch (op) {
+            case 1:
+                byteFileRandler.create(list);
+                System.out.println();
+                System.out.println();
+                //System.out.println("Digite nova opção ou 0 para sair");
+                //op = Integer.parseInt(sc.nextLine());
+                op=0;
+                System.out.println();
+                break;
+            case 2:
+                Menu(byteFileRandler, list, sc);
+                System.out.println();
+                System.out.println("Digite nova opção ou 0 para sair");
+                op = Integer.parseInt(sc.nextLine());
+                System.out.println();
+                break;
+            case 3:
+                System.out.println("Digite o Id para alterar:");
+                //id = Integer.parseInt(sc.nextLine());
+                idString = sc.nextLine();
+                byteFileRandler.update(idString, list);
+                System.out.println();
+                //System.out.println("Digite nova opção ou 0 para sair");
+                op = 0;
+                System.out.println();
+
+                break;
+            case 4:
+                System.out.println("Digite o Id para deletar:");
+                idString = sc.nextLine();
+                byteFileRandler.delete(idString);
+                System.out.println();
+                System.out.println();
+                System.out.println("Digite nova opção ou 0 para sair");
+                op = Integer.parseInt(sc.nextLine());
+                System.out.println();
+                break;
+                case 0:
+                System.out.println();
+                break;
+            default:
+            System.out.println("Opção inválida");
+            System.out.println();
+            System.out.println("Digite nova opção ou 0 para sair");
+            op = Integer.parseInt(sc.nextLine());
+            System.out.println();
+                break;
+        }} while (op>0);
+
+
+        sc.close();
+
+    }
+
+
+    private static void Menu(Crud byteFileRandler, List listIndex, Scanner sc) throws Exception { // Menu that shows in terminal for
+                                                                                      // interaction
+
         // MENU
         System.out.println("\n ------------------------------------ \n");
         System.out.println("Pesquisar Filmes por Genero\n");
@@ -73,7 +146,6 @@ public class exTP {
             System.out.println("Opção não válida\n");
         }
 
-        sc.close();
     }
     
     // search for 2 parameters 
@@ -261,6 +333,8 @@ public class exTP {
 
     byteFileRandler.getMoviesInPosting(listIndex.readTwoParameter(op, opp));
 
+    System.out.println("----------------------------------");
+
     }
 
     // search for 1 parameter
@@ -352,6 +426,9 @@ public class exTP {
                 byteFileRandler.getMoviesInPosting(listIndex.readOneParameter("Stand-Up Comedy"));
                 break;
         }
+
+
+        System.out.println("----------------------------------");
 
     }
 

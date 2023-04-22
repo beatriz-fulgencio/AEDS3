@@ -23,7 +23,7 @@ public class Term {
         fileReader = new RandomAccessFile(file, "rw");
     }
 
-    // funcao para adicionar no posting
+    // add term on posting
     public void addToPosting(long add, int id) throws IOException{
         Posting p = new Posting(address, file);
 
@@ -33,6 +33,7 @@ public class Term {
         p.writeFile();
     }
 
+    // create a posting
     public void createPosting(long add, int id) throws IOException{
         Posting p = new Posting(address, file);
 
@@ -40,6 +41,7 @@ public class Term {
         p.writeFile();
     }
 
+    // get terms on posting
     public ArrayList<Element> getPostingElements() throws Exception{
         Posting p = new Posting(address, file);
         p.readFile(address);
@@ -47,6 +49,7 @@ public class Term {
         return p.getElements();
     }
 
+    // remove from posting
     public void removeFromPosting(int id) throws Exception{
         Posting p = new Posting(address, file);
 

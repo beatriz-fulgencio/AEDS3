@@ -75,13 +75,14 @@ public class exTP {
 
         sc.close();
     }
-
+    
+    // search for 2 parameters 
     private static void searchList2(Crud byteFileRandler, List listIndex, Scanner sc) throws Exception {
 
         System.out.println("Reveja as opções de gêneros e digite a letra do primeiro genero que deseja filtar\n");
         String op1 = sc.nextLine();
 
-        op1 = op1.strip();
+        op1 = op1.strip(); // retorna uma string, com todos os espaços em branco à esquerda e à direita removidos
 
         System.out.println("Reveja as opções de gêneros e digite a letra do segundo genero que deseja filtar\n");
         String op2 = sc.nextLine();
@@ -91,6 +92,7 @@ public class exTP {
         String op = null;
         String opp = null;
 
+        // all the genres
         switch (op1) {
             case "A":
             case "a":
@@ -261,11 +263,12 @@ public class exTP {
 
     }
 
+    // search for 1 parameter
     private static void searchList1(Crud byteFileRandler, List listIndex, Scanner sc) throws Exception {
         System.out.println("Reveja as opções de gêneros e digite a letra do que deseja pesquisar\n");
         String op = sc.nextLine();
 
-        op = op.strip();
+        op = op.strip(); // retorna uma string, com todos os espaços em branco à esquerda e à direita removidos
 
         switch (op) {
             case "A":

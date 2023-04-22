@@ -19,6 +19,7 @@ public class Posting {
         fileReader = new RandomAccessFile(file, "rw");
     }
 
+    // insertion
     public void AddElement(long itemAddress, int id) {
         Element el = new Element(itemAddress, id);
         posting.add(el);
@@ -28,22 +29,23 @@ public class Posting {
         return posting;
     }
 
+    // gets the size of the posting
     public int getElementCount() {
         return posting.size();
     }
 
     public void writeFile() throws IOException {
-        fileReader.seek(address);
+        fileReader.seek(address); // seeks the pointer at the address
 
-        fileReader.writeInt(posting.size());
+        fileReader.writeInt(posting.size()); // writes the size of the posting
 
-        for (Element el : posting) {
-            fileReader.writeInt(el.get_id());
-            fileReader.writeLong(el.get_address());
+        for (Element el : posting) { // for each element on posting
+            fileReader.writeInt(el.get_id()); // write the id
+            fileReader.writeLong(el.get_address()); // write the address
         }
 
 
-        if(posting.size()<max){ //for all open space left in the posting writes -1 (space holder)
+        if(posting.size()<max){ // for all open space left in the posting writes -1 (space holder)
             int length = max - posting.size();
             for(int i=0; i<length;i++){
                 fileReader.writeLong(-1);
@@ -53,9 +55,9 @@ public class Posting {
     }
 
     public void readFile(long add) throws IOException {
-        fileReader.seek(add);
+        fileReader.seek(add); // seekks the pointer at the address
 
-        fileReader.readInt();
+        fileReader.readInt(); // reads the size of the posting
 
         long pos = fileReader.getFilePointer(); // saves the position to seek for next element
         while (fileReader.readInt() != -1) {
@@ -69,14 +71,16 @@ public class Posting {
 
     }
 
+    // get the address
     public long getAddress(){
         return address; //returns bucket address
     }
     
+    // remove element from posting
     public void removeElement(int id){
-        for (Element el : posting) {
-            if(el.get_id()==id){
-                posting.remove(el);
+        for (Element el : posting) { // for each element on posting
+            if(el.get_id()==id){ // if the id searched equals to the id written in that position
+                posting.remove(el); // remove element from posting
             }
         }
     }

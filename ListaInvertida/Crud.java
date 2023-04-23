@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Crud {
@@ -14,16 +14,26 @@ public class Crud {
 
     }
 
-    public void writeMovie(Movie movie) throws IOException {
+    public void writeMovie(Movie movie, List l) throws Exception {
         byte[] ba = movie.toByteArray(); // creates a byte array from the movie information
         // Write the last id in the beggining of file
         fileReader.seek(0);
         fileReader.writeUTF(movie.get_movieId());
 
+        long address = fileReader.length();
         // add the new movie to the file
-        fileReader.seek(fileReader.length()); // goes to the end of the file
+        fileReader.seek(address); // goes to the end of the file
         fileReader.writeInt(ba.length); // writes the size of the object
         fileReader.write(ba); // writes the object byte array
+        AddMovieToPosting(movie, l, address);
+    }
+
+    private void AddMovieToPosting(Movie movie, List l, long address) throws Exception {
+        String[] genres = movie.get_genres();
+
+        for (String g : genres) {
+            l.addItem(g, address, Integer.parseInt(movie.get_movieId()));
+        }
     }
 
     public Movie readMovie(int fileSize, String id, boolean lapide) throws Exception {
@@ -120,8 +130,65 @@ public class Crud {
         return selectMovie; // return movie
     }
 
+
+    public void clear() {
+        file.delete();
+    }
+
+
+    public void getAddress(long add) throws IOException{
+        fileReader.seek(add);
+        //fileReader.readUTF();
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+
+        try {
+            
+                position = fileReader.getFilePointer();
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if (lapide) {
+                    fileReader.readInt();
+                    movieId = fileReader.readUTF();
+                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()); // save the movie
+            }
+        } catch (Exception e) {
+            System.err.println("Id " +  "não encontrado");
+        }
+        //return selectMovie; 
+    }
+
+
+    public void getMoviesInPosting(ArrayList<Element> elements) throws Exception{
+        
+        for (Element el : elements) {
+            fileReader.seek(el.get_address());
+        //fileReader.readUTF();
+        int sizeMovie;
+        boolean lapide;
+        String movieId;
+
+        try {
+                position = fileReader.getFilePointer();
+                sizeMovie = fileReader.readInt();
+                lapide = fileReader.readBoolean();
+                if (lapide) {
+                    fileReader.readInt();
+                    movieId = fileReader.readUTF();
+                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()+ "\n"); // save the movie
+            } 
+        } catch (Exception e) {
+            System.err.println("Id " +  "não encontrado");
+        }
+        }
+
+    }
+
     /* CRUD */// --------------------
-    public void create() throws Exception {
+
+    //Create -> chamar o adiconar da lista invertida
+    public void create(List l) throws Exception {
         Scanner sc = new Scanner(System.in); // scanner to read terminal information
         Movie movie = new Movie();
 
@@ -148,11 +215,15 @@ public class Crud {
 
         // System.out.println(movie);
 
-        writeMovie(movie);// add movie to byte file
+        writeMovie(movie, l);// add movie to byte file
+        System.out.println("Novo filme:\n" + movie.toString());
 
         sc.close();
-
     }
+
+    //update -> se genero alterar, chamar um delete e add dos generos do id 
+
+    //update-> se o endereço mudar chamar um add e delete
 
     public Movie select(String id) throws IOException {
         Movie movie = new Movie();
@@ -160,7 +231,7 @@ public class Crud {
         return movie;
     }
 
-    public void update(String id) throws Exception {
+    public void update(String id, List l) throws Exception {
         Movie movie = select(id); // get the movie that is being updated
         Scanner sc = new Scanner(System.in);
         if (movie != null) {
@@ -179,6 +250,7 @@ public class Crud {
                     break;
                 case "b":
                 case "B":
+                    l.delete(Integer.parseInt(id), movie.get_genres());
                     System.out.println("Digite o novos gêneros (separe-os com vírgula):");
                     movie.set_genres(sc.nextLine().split(","));
                     break;
@@ -207,16 +279,24 @@ public class Crud {
             int sizeLastMovie = fileReader.readInt();
             if (ba.length <= sizeLastMovie) { // if the size is the same write in the same place
                 fileReader.write(ba);
+                if(option.equals("B")|| option.equals("b")){
+                    for (String g : movie.get_genres()) {
+                        l.addItem(g, position, Integer.parseInt(id));
+                    }
+                }
+
             } else { // else delete the current file and save the modified one as new
                 fileReader.writeBoolean(false);
-                writeMovie(movie);
+                writeMovie(movie, l);
             }
             System.out.println();
 
         }
     }
 
-    public void delete(String id) throws IOException {
+    //delete -> chamar todos os generos do filme e remover o id
+
+       public void delete(String id) throws IOException {
         fileReader.seek(0); // set the poiter at the beggining of the file
         fileReader.readUTF();// skip last id
         int sizeMovie;
@@ -249,61 +329,5 @@ public class Crud {
 
         }
     }
-
-    public void clear() {
-        file.delete();
-    }
-
-    public void read(Directory Hash) throws IOException {
-        // Hash = new Directory("Hash.db");
-        fileReader.seek(0); // set the poiter at the beggining of the file
-        fileReader.readUTF();// skip last id
-        int sizeMovie;
-        boolean lapide;
-        String movieId;
-        try {
-            while (fileReader.getFilePointer() < fileReader.length()) { // while the file is not done
-                long pos = fileReader.getFilePointer();
-                sizeMovie = fileReader.readInt(); // read the size of the object being read
-                lapide = fileReader.readBoolean(); // see if movie is valid
-                if (lapide) {
-                    fileReader.readInt();
-                    movieId = fileReader.readUTF();
-                    if(movieId.equals("1230")) {
-                        System.out.print(".");
-                    } 
-                    Hash.AddItem(Integer.parseInt(movieId), pos);
-                    fileReader.skipBytes(sizeMovie - 11);
-                } else {
-                    fileReader.skipBytes(sizeMovie - 1); // if is not valid go to next one
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getAddress(long add) throws IOException{
-        fileReader.seek(add);
-        //fileReader.readUTF();
-        int sizeMovie;
-        boolean lapide;
-        String movieId;
-
-        try {
-            
-                position = fileReader.getFilePointer();
-                sizeMovie = fileReader.readInt();
-                lapide = fileReader.readBoolean();
-                if (lapide) {
-                    fileReader.readInt();
-                    movieId = fileReader.readUTF();
-                    System.out.print(readMovie(sizeMovie, movieId, lapide).toString()); // save the movie
-            }
-        } catch (Exception e) {
-            System.err.println("Id " +  "não encontrado");
-        }
-        //return selectMovie; 
-    }
-
+    
 }

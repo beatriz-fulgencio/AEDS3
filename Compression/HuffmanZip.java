@@ -1,13 +1,6 @@
 package Compression;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.PriorityQueue;
 
 //if the frequency of a byte is more than 2^32 then there will be problem
@@ -357,4 +350,4 @@ public class HuffmanZip {
 													// file
 		initHzipping();
 	}
-} 
+}

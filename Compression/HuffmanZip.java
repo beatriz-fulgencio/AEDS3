@@ -1,12 +1,11 @@
 package Compression;
 
 import java.io.*;
-import java.util.PriorityQueue;
+import java.util.PriorityQueue; //a PriorityQueue is used when the objects are supposed to be processed based on the priority.
 
-//if the frequency of a byte is more than 2^32 then there will be problem
 public class HuffmanZip {
 
-	static PriorityQueue<TREE> pq = new PriorityQueue<TREE>();
+	static PriorityQueue<TREE> queue = new PriorityQueue<TREE>();
 	static int[] freq = new int[300];
 	static String[] ss = new String[300];
 	static int exbits;
@@ -95,7 +94,7 @@ public class HuffmanZip {
 			freq[i] = 0;
 		for (i = 0; i < 300; i++)
 			ss[i] = "";
-		pq.clear();
+		queue.clear();
 	}
 
 	/**********************************************************************************/
@@ -138,7 +137,7 @@ public class HuffmanZip {
 	 *******************************************************************************/
 	public static void MakeNode() {
 		int i;
-		pq.clear();
+		queue.clear();
 
 		for (i = 0; i < 300; i++) {
 			if (freq[i] != 0) {
@@ -147,7 +146,7 @@ public class HuffmanZip {
 				Temp.Freqnc = freq[i];
 				Temp.Lchild = null;
 				Temp.Rchild = null;
-				pq.add(Temp);
+				queue.add(Temp);
 				cnt++;
 			}
 
@@ -167,16 +166,16 @@ public class HuffmanZip {
 
 		// will there b a problem if the file is empty
 		// a bug is found if there is only one character
-		while (pq.size() != 1) {
+		while (queue.size() != 1) {
 			TREE Temp = new TREE();
-			Temp1 = pq.poll();
-			Temp2 = pq.poll();
+			Temp1 = queue.poll();
+			Temp2 = queue.poll();
 			Temp.Lchild = Temp1;
 			Temp.Rchild = Temp2;
 			Temp.Freqnc = Temp1.Freqnc + Temp2.Freqnc;
-			pq.add(Temp);
+			queue.add(Temp);
 		}
-		Root = pq.poll();
+		Root = queue.poll();
 	}
 
 	/*******************************************************************************/

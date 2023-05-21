@@ -1,16 +1,47 @@
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Huffman {
 
-    private static int alphabetSize;
+    private static final int alphabetSize = 256;
 
     public HuffmanEncodedResult compress(final String data) {
 
-        int[] freq = buildFrequency(data);
+        final int[] freq = buildFrequency(data);
 
-        Node root = buildTree(freq);
+         Node root = buildTree(freq);
 
-        return null;
+         Map<Character, String> lookupTable = buildLookupTable(root);
+
+        return new HuffmanEncodedResult(generateEncodedData(data, lookupTable), root);
+    }
+
+    private String generateEncodedData(String data, Map<Character, String> lookupTable) {
+
+        StringBuilder builder = new StringBuilder();
+        for(final char character : data.toCharArray()){
+            builder.append(lookupTable.get(character));
+        }
+
+        return builder.toString();
+    }
+
+    private static Map<Character, String> buildLookupTable(Node root){
+
+        Map<Character, String> lookupTable = new HashMap<>();
+
+        buildLookupTableImpl(root, "", lookupTable);
+
+        return lookupTable;
+    }
+
+    private static void buildLookupTableImpl(Node node, String s, Map<Character, String> lookupTable) {
+
+        if(node.isLeaf()==false){
+            buildLookupTableImpl(node.getLeft(), s + '0', lookupTable);
+            buildLookupTableImpl(node.getRight(), s + '1', lookupTable);
+        }else{
+            lookupTable.put(node.getCharacter(), s);
+        }
     }
 
     private static Node buildTree(int[] frequency) {
@@ -22,18 +53,21 @@ public class Huffman {
             }
         }
 
+        if(priorityQueue.size()==1){
+            priorityQueue.add(new Node('\0', 1, null, null));
+        }
+
         while(priorityQueue.size() > 1) {
             Node left = priorityQueue.poll();
             Node right = priorityQueue.poll();
 
-            Node parent = new Node('\0', (left.frequency + right.frequency), left, right);
+            Node parent = new Node('\0', (left.getFrequency() + right.getFrequency()), left, right);
             priorityQueue.add(parent);
 
-            return priorityQueue.poll();
         }
     
-        return null;
-    }
+        return priorityQueue.poll();
+   }
 
     public static int[] buildFrequency (String data) {
         int[] freq = new int[alphabetSize];
@@ -46,49 +80,43 @@ public class Huffman {
     }
 
     public String decompress(final HuffmanEncodedResult result) {
-        return null;
-    }
+        StringBuilder resultBuilder = new StringBuilder();
 
-    static class Node implements Comparable<Node>{
-        private char character;
-        private int frequency;
+        Node current = result.getRoot();
 
-        private Node left;
-        private Node right;
+        int i=0;
 
-        private Node(char character, int frequency, Node left, Node right) {
-            this.character = character;
-            this.frequency = frequency;
-            this.left = left;
-            this.right = right;
-        }
-
-        boolean isLeaf() {
-            return this.left == null && this.right == null;
-        }
-
-        @Override
-        public int compareTo(Huffman.Node o) {
+        while(i<result.getEncodedData().length()){
             
-            int frequencyComp = Integer.compare(this.frequency, o.frequency);
-
-            if(frequencyComp != 0) {
-                return frequencyComp;
+            while(current.isLeaf()==false){
+                char bit = result.getEncodedData().charAt(i);
+                if(bit=='1'){
+                    current = current.getRight();
+                }else if (bit=='0'){
+                    current = current.getLeft();
+                }else {
+                    throw new IllegalArgumentException("Invalid bit!" + bit);
+                }
+                i++;
             }
 
-            return Integer.compare(this.character, o.character);
+            resultBuilder.append(current.getCharacter());
+            current= result.getRoot();
+            
         }
+
+        return resultBuilder.toString();
     }
 
-    static class HuffmanEncodedResult {
-
-    }
-
+    
     public static void main(String[] args) {
-        String test = "abbcdeeeefg";
-        int[] frequency = buildFrequency(test);
-        Node n = buildTree(frequency);
-
-        System.out.println(n);
+        String test = "ola";
+        Huffman encoder = new Huffman();
+        HuffmanEncodedResult result  = encoder.compress(test);
+        System.out.println(result.getEncodedData());
+        System.out.println(encoder.decompress(result));
     }
 }
+
+
+

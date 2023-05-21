@@ -2,8 +2,10 @@ import java.util.*;
 
 public class Huffman {
 
+    // defining the alphabet size
     private static final int alphabetSize = 256;
 
+    // COMPRESSION
     public HuffmanEncodedResult compress(final String data) {
 
         final int[] freq = buildFrequency(data);
@@ -44,21 +46,24 @@ public class Huffman {
         }
     }
 
+    // builds the huffman tree
     private static Node buildTree(int[] frequency) {
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
 
+        // adding the node to the priority queue
         for(char i=0; i < alphabetSize; i++) {
             if(frequency[i] > 0) {
                 priorityQueue.add(new Node(i, frequency[i], null, null));
             }
         }
 
+        // if the queue only has one element
         if(priorityQueue.size()==1){
             priorityQueue.add(new Node('\0', 1, null, null));
         }
 
         while(priorityQueue.size() > 1) {
-            Node left = priorityQueue.poll();
+            Node left = priorityQueue.poll(); // This method returns the element at the front of the container or the head of the Queue. It returns null when the Queue is empty
             Node right = priorityQueue.poll();
 
             Node parent = new Node('\0', (left.getFrequency() + right.getFrequency()), left, right);
@@ -79,6 +84,8 @@ public class Huffman {
         return freq;
     }
 
+    
+    // DECOMPRESSION
     public String decompress(final HuffmanEncodedResult result) {
         StringBuilder resultBuilder = new StringBuilder();
 
@@ -88,11 +95,12 @@ public class Huffman {
 
         while(i<result.getEncodedData().length()){
             
+            // while the node is not leaf
             while(current.isLeaf()==false){
                 char bit = result.getEncodedData().charAt(i);
-                if(bit=='1'){
+                if(bit=='1'){ // if right, then write 1
                     current = current.getRight();
-                }else if (bit=='0'){
+                }else if (bit=='0'){ // if left, then write 0
                     current = current.getLeft();
                 }else {
                     throw new IllegalArgumentException("Invalid bit!" + bit);

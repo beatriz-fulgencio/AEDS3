@@ -118,7 +118,8 @@ public class Huffman {
 
     
     public static void main(String[] args) {
-        String test = "ola";
+        // entry
+        String test = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ligula felis, bibendum vel sem tincidunt, maximus malesuada ligula. In eu elit non lorem fermentum blandit eu sit amet lorem. Nam non consequat diam, eget auctor nisl. Vestibulum id est ac lectus hendrerit laoreet. Donec pretium augue ut ligula interdum lobortis. Ut iaculis nisi a finibus bibendum. Suspendisse accumsan orci eu diam euismod molestie. Morbi porttitor in orci sed auctor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur pellentesque suscipit condimentum. Integer maximus ipsum lectus, et sodales arcu sagittis eu. Proin porta scelerisque magna, sit amet laoreet mi fringilla eget. Praesent eget arcu bibendum, facilisis risus at, ultrices lectus. Mauris ligula dolor, posuere id scelerisque a, placerat ut sem. Vestibulum molestie purus risus, non consectetur leo volutpat eget. Proin mauris risus, viverra sit amet justo sit amet, vehicula eleifend elit. Nunc semper euismod diam a interdum. Quisque lorem dolor, pellentesque egestas sagittis nec, ultrices at mi. Aliquam eget posuere odio. Fusce mollis commodo est sit amet bibendum. Fusce vel leo sed nisi rhoncus lobortis eget rhoncus odio. Nulla facilisi. Integer sit amet quam id orci semper interdum pulvinar quis arcu. Praesent id ante lorem. Donec.";
         Huffman encoder = new Huffman();
         HuffmanEncodedResult result  = encoder.compress(test);
         System.out.println(result.getEncodedData());
